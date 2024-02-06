@@ -34,5 +34,25 @@ export class Withdraw {
     }
   }
 
+  get withdrawId() {
+    return this.props.withdrawId
+  }
+
+  get notebookSerialNumber() {
+    return this.props.notebookSerialNumber
+  }
+
+  get studentRA() {
+    return this.props.studentRA
+  }
+
+  get withdrawalTime() {
+    return this.props.withdrawalTime
+  }
+
+  get finishTime() {
+    return this.props.finishTime
+  }
+
   
 }
