@@ -1,4 +1,5 @@
 import { EntityError } from '../../helpers/errors/domain_errors'
+import { STATE } from '../enums/state_enum'
 
 export interface WithdrawProps {
   withdrawId: number
@@ -6,6 +7,7 @@ export interface WithdrawProps {
   studentRA: string
   withdrawalTime: number
   finishTime?: number
+  state: STATE 
 }
 
 export class Withdraw {
@@ -54,6 +56,10 @@ export class Withdraw {
     return this.props.finishTime
   }
 
+  get state() {
+    return this.props.state
+  }
+
   static validateWithdrawId(withdrawId: number): boolean {
     return (
       withdrawId !== undefined &&
@@ -70,7 +76,7 @@ export class Withdraw {
       typeof notebookSerialNumber === 'string' &&
       notebookSerialNumber.length > 0 &&
       notebookSerialNumber.length !== 0 &&
-        notebookSerialNumber.length <= 50
+      notebookSerialNumber.length <= 50
     )
   }
 

@@ -1,5 +1,3 @@
-// Withdraw.test.ts
-
 import { Withdraw } from '../../../../src/shared/domain/entities/withdraw'
 import { EntityError } from '../../../../src/shared/helpers/errors/domain_errors'
 import { describe, it, expect } from 'vitest'
@@ -48,7 +46,7 @@ describe('[Withdraw Entity Tests]', () => {
         withdrawId: 1,
         notebookSerialNumber: 'ABC123',
         studentRA: '23.00335-9',
-        withdrawalTime: -1, 
+        withdrawalTime: -1,
         state: STATE.PENDING,
       })
     }).toThrowError(EntityError)
