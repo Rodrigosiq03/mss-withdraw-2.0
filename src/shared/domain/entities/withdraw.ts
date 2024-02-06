@@ -54,5 +54,44 @@ export class Withdraw {
     return this.props.finishTime
   }
 
-  
+  static validateWithdrawId(withdrawId: number): boolean {
+    return (
+      withdrawId !== undefined &&
+      withdrawId !== null &&
+      typeof withdrawId === 'number' &&
+      withdrawId >= 0
+    )
+  }
+
+  static validateNotebookSerialNumber(notebookSerialNumber: string): boolean {
+    return (
+      notebookSerialNumber !== undefined &&
+      notebookSerialNumber !== null &&
+      typeof notebookSerialNumber === 'string' &&
+      notebookSerialNumber.length > 0 &&
+      notebookSerialNumber.length !== 0 &&
+        notebookSerialNumber.length <= 50
+    )
+  }
+
+  static validateStudentRA(studentRA: string): boolean {
+    const raPattern = /^\d{2}\.\d{5}-[0-9]$/
+
+    return raPattern.test(studentRA)
+  }
+
+  static validateTime(time: number): boolean {
+    if (time === null || time === undefined) {
+      return false
+    }
+
+    if (typeof time !== 'number' || isNaN(time)) {
+      return false
+    }
+
+    if (time < 1641006000000) {
+      return false
+    }
+    return true
+  }
 }
