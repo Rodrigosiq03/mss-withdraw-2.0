@@ -34,6 +34,14 @@ export class Withdraw {
     ) {
       throw new EntityError('finishTime')
     }
+
+    if (
+      props.finishTime !== undefined &&
+      props.initTime !== undefined &&
+      props.finishTime < props.initTime
+    ) {
+      throw new EntityError('Finish time (Finish time cannot be earlier than init time)')
+    }
   }
 
   get withdrawId() {
