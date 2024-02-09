@@ -2,7 +2,7 @@ import { EntityError } from '../../helpers/errors/domain_errors'
 import { STATE } from '../enums/state_enum'
 
 export interface WithdrawProps {
-  withdrawId: number
+  withdrawId: string
   notebookSerialNumber: string
   studentRA: string
   initTime: number
@@ -40,7 +40,8 @@ export class Withdraw {
     return this.props.withdrawId
   }
 
-  set setWithdrawId(withdrawId: number) {
+  set setWithdrawId(withdrawId: string) {
+    // Alterado para setWithdrawId -> withdrawId
     if (!Withdraw.validateWithdrawId(withdrawId)) {
       throw new EntityError('withdrawId')
     }
@@ -102,12 +103,12 @@ export class Withdraw {
     this.props.state = state
   }
 
-  static validateWithdrawId(withdrawId: number): boolean {
+  static validateWithdrawId(withdrawId: string): boolean {
     return (
       withdrawId !== undefined &&
       withdrawId !== null &&
-      typeof withdrawId === 'number' &&
-      withdrawId >= 0
+      typeof withdrawId === 'string' &&
+      withdrawId.trim().length > 0
     )
   }
 
