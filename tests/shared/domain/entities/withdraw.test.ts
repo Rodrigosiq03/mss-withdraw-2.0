@@ -9,7 +9,7 @@ describe('[Withdraw Entity Tests]', () => {
       withdrawId: 1,
       notebookSerialNumber: 'ABC123',
       studentRA: '23.00335-9',
-      withdrawalTime: Date.now(),
+      initTime: Date.now(),
       state: STATE.PENDING,
     })
 
@@ -22,7 +22,7 @@ describe('[Withdraw Entity Tests]', () => {
         withdrawId: 1,
         notebookSerialNumber: '',
         studentRA: '23.00335-9',
-        withdrawalTime: Date.now(),
+        initTime: Date.now(),
         state: STATE.PENDING,
       })
     }).toThrowError(EntityError)
@@ -34,7 +34,7 @@ describe('[Withdraw Entity Tests]', () => {
         withdrawId: 1,
         notebookSerialNumber: 'ABC123',
         studentRA: '',
-        withdrawalTime: Date.now(),
+        initTime: Date.now(),
         state: STATE.PENDING,
       })
     }).toThrowError(EntityError)
@@ -46,7 +46,7 @@ describe('[Withdraw Entity Tests]', () => {
         withdrawId: 1,
         notebookSerialNumber: 'ABC123',
         studentRA: '23.00335-9',
-        withdrawalTime: -1,
+        initTime: -1,
         state: STATE.PENDING,
       })
     }).toThrowError(EntityError)
@@ -57,7 +57,7 @@ describe('[Withdraw Entity Tests]', () => {
       withdrawId: 1,
       notebookSerialNumber: 'ABC123',
       studentRA: '23.00335-9',
-      withdrawalTime: Date.now(),
+      initTime: Date.now(),
       state: STATE.PENDING,
     })
 
@@ -70,7 +70,7 @@ describe('[Withdraw Entity Tests]', () => {
         withdrawId: 1,
         notebookSerialNumber: 'ABC123',
         studentRA: '23.00335-9',
-        withdrawalTime: Date.now(),
+        initTime: Date.now(),
         finishTime: -1,
         state: STATE.PENDING,
       })

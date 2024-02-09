@@ -5,7 +5,7 @@ export interface WithdrawProps {
   withdrawId: number
   notebookSerialNumber: string
   studentRA: string
-  withdrawalTime: number
+  initTime: number
   finishTime?: number
   state: STATE 
 }
@@ -24,7 +24,7 @@ export class Withdraw {
       throw new EntityError('studentRA')
     }
 
-    if (!Withdraw.validateTime(props.withdrawalTime)) {
+    if (!Withdraw.validateTime(props.initTime)) {
       throw new EntityError('withdrawalTime')
     }
 
@@ -49,7 +49,7 @@ export class Withdraw {
   }
 
   get withdrawalTime() {
-    return this.props.withdrawalTime
+    return this.props.initTime
   }
 
   get finishTime() {
