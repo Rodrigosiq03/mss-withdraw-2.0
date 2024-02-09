@@ -41,7 +41,6 @@ export class Withdraw {
   }
 
   set setWithdrawId(withdrawId: string) {
-    // Alterado para setWithdrawId -> withdrawId
     if (!Withdraw.validateWithdrawId(withdrawId)) {
       throw new EntityError('withdrawId')
     }
