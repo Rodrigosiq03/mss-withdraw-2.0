@@ -7,7 +7,7 @@ export interface WithdrawProps {
   studentRA: string
   initTime: number
   finishTime?: number
-  state: STATE 
+  state: STATE
 }
 
 export class Withdraw {
@@ -40,24 +40,66 @@ export class Withdraw {
     return this.props.withdrawId
   }
 
+  set setWithdrawId(withdrawId: number) {
+    if (!Withdraw.validateWithdrawId(withdrawId)) {
+      throw new EntityError('withdrawId')
+    }
+    this.props.withdrawId = withdrawId
+  }
+
   get notebookSerialNumber() {
     return this.props.notebookSerialNumber
+  }
+
+  set setNotebookSerialNumber(notebookSerialNumber: string) {
+    if (!Withdraw.validateNotebookSerialNumber(notebookSerialNumber)) {
+      throw new EntityError('notebookSerialNumber')
+    }
+    this.props.notebookSerialNumber = notebookSerialNumber
   }
 
   get studentRA() {
     return this.props.studentRA
   }
 
-  get withdrawalTime() {
+  set setStudentRA(studentRA: string) {
+    if (!Withdraw.validateStudentRA(studentRA)) {
+      throw new EntityError('studentRA')
+    }
+    this.props.studentRA = studentRA
+  }
+
+  get initTime() {
     return this.props.initTime
+  }
+
+  set setInitTime(initTime: number) {
+    if (!Withdraw.validateTime(initTime)) {
+      throw new EntityError('withdrawalTime')
+    }
+    this.props.initTime = initTime
   }
 
   get finishTime() {
     return this.props.finishTime
   }
 
+  set setFinishTime(finishTime: number) {
+    if (finishTime !== undefined && !Withdraw.validateTime(finishTime)) {
+      throw new EntityError('finishTime')
+    }
+    this.props.finishTime = finishTime
+  }
+
   get state() {
     return this.props.state
+  }
+
+  set state(state: STATE) {
+    if (!Withdraw.validateState(state)) {
+      throw new EntityError('state')
+    }
+    this.props.state = state
   }
 
   static validateWithdrawId(withdrawId: number): boolean {
@@ -99,5 +141,9 @@ export class Withdraw {
       return false
     }
     return true
+  }
+
+  static validateState(state: STATE): boolean {
+    return Object.values(STATE).includes(state)
   }
 }
