@@ -2,21 +2,21 @@ import { STATE, toEnum } from '../enums/state_enum'
 import { EntityError } from '../../helpers/errors/domain_errors'
 
 export type UserProps = {
-  id: number;
-  name: string;
-  email: string;
-  state?: STATE;
+  id: number
+  name: string
+  email: string
+  state?: STATE
 }
 
 export type JsonProps = {
-  user_id: number;
-  name: string;
-  email: string;
-  state?: string;
+  user_id: number
+  name: string
+  email: string
+  state?: string
 }
 
 export class User {
-  constructor (public props: UserProps) {
+  constructor(public props: UserProps) {
     if (!User.validateId(props.id as number)) {
       throw new EntityError('props.id')
     }
@@ -36,7 +36,6 @@ export class User {
       throw new EntityError('props.state')
     }
     this.props.state = props.state
-
   }
 
   get id() {
@@ -82,13 +81,13 @@ export class User {
     }
     this.props.state = state
   }
-    
+
   static fromJSON(json: JsonProps) {
     return new User({
       id: json.user_id,
       name: json.name,
       email: json.email,
-      state: toEnum(json.state as string)
+      state: toEnum(json.state as string),
     })
   }
 
@@ -97,14 +96,14 @@ export class User {
       id: this.id,
       name: this.name,
       email: this.email,
-      state: this.state
+      state: this.state,
     }
   }
 
   static validateId(id: number): boolean {
     if (id == null) {
       return false
-    } else if (typeof(id) != 'number') {
+    } else if (typeof id != 'number') {
       return false
     }
     return true
@@ -113,7 +112,7 @@ export class User {
   static validateName(name: string): boolean {
     if (name == null) {
       return false
-    } else if (typeof(name) != 'string') {
+    } else if (typeof name != 'string') {
       return false
     } else if (name.length < 3) {
       return false
@@ -127,7 +126,7 @@ export class User {
     if (email == null) {
       return false
     }
-    if (typeof(email) != 'string') {
+    if (typeof email != 'string') {
       return false
     }
     if (!email.match(regexp)) {
@@ -139,11 +138,10 @@ export class User {
   static validateState(state: STATE): boolean {
     if (state == null) {
       return false
-    } 
+    }
     if (Object.values(STATE).includes(state) == false) {
       return false
     }
     return true
   }
-
 }
