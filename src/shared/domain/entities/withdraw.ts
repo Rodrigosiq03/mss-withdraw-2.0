@@ -7,32 +7,32 @@ export interface WithdrawProps {
   studentRA: string
   initTime: number
   finishTime?: number
-  state: STATE
+  state?: STATE
 }
 
 export class Withdraw {
   constructor(public props: WithdrawProps) {
     if (!Withdraw.validateWithdrawId(props.withdrawId)) {
-      throw new EntityError('withdrawId')
+      throw new EntityError('props.withdrawId')
     }
 
     if (!Withdraw.validateNotebookSerialNumber(props.notebookSerialNumber)) {
-      throw new EntityError('notebookSerialNumber')
+      throw new EntityError('props.notebookSerialNumber')
     }
 
     if (!Withdraw.validateStudentRA(props.studentRA)) {
-      throw new EntityError('studentRA')
+      throw new EntityError('props.studentRA')
     }
 
     if (!Withdraw.validateTime(props.initTime)) {
-      throw new EntityError('withdrawalTime')
+      throw new EntityError('props.initTime')
     }
 
     if (
       props.finishTime !== undefined &&
       !Withdraw.validateTime(props.finishTime)
     ) {
-      throw new EntityError('finishTime')
+      throw new EntityError('props.finishTime')
     }
 
     if (
@@ -40,7 +40,9 @@ export class Withdraw {
       props.initTime !== undefined &&
       props.finishTime < props.initTime
     ) {
-      throw new EntityError('Finish time (Finish time cannot be earlier than init time)')
+      throw new EntityError(
+        'props.initTime and props.finishTime must be in the correct order',
+      )
     }
   }
 
@@ -100,7 +102,7 @@ export class Withdraw {
   }
 
   get state() {
-    return this.props.state
+    return this.props.state ?? STATE.PENDING
   }
 
   set state(state: STATE) {
