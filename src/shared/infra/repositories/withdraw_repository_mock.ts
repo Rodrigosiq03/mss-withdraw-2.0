@@ -1,4 +1,4 @@
-import { STATE } from '@/shared/domain/enums/state_enum'
+import { STATE } from '../../domain/enums/state_enum'
 import { Withdraw } from '../../domain/entities/withdraw'
 import { IWithdrawRepository } from '../../domain/repositories/withdraw_repository_interface'
 import { NoItemsFound } from '../../helpers/errors/usecase_errors'
