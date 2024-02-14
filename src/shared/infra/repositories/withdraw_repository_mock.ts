@@ -29,7 +29,7 @@ export class WithdrawRepositoryMock implements IWithdrawRepository {
   async getWithdrawByRA(ra: string): Promise<Withdraw> {
     const withdraw = this.withdraws.find((w) => w.studentRA === ra)
     if (!withdraw) {
-      throw new NoItemsFound('RA')
+      throw new NoItemsFound('props.studentRA')
     }
     return withdraw
   }
@@ -41,7 +41,7 @@ export class WithdrawRepositoryMock implements IWithdrawRepository {
   async deleteWithdrawByRA(ra: string): Promise<boolean> {
     const index = this.withdraws.findIndex((w) => w.studentRA === ra)
     if (index === -1) {
-      throw new NoItemsFound('RA')
+      throw new NoItemsFound('props.studentRA')
     }
     this.withdraws.splice(index, 1)
     return true
