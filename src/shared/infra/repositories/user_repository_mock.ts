@@ -9,13 +9,13 @@ export class UserRepositoryMock implements IUserRepository {
       id: 1,
       name: 'user1',
       email: 'user1@gmail.com',
-      state: STATE.PENDING
+      state: STATE.PENDING,
     }),
     new User({
       id: 2,
       name: 'user2',
       email: 'user2@gmail.com',
-      state: STATE.PENDING
+      state: STATE.PENDING,
     }),
   ]
 
@@ -26,7 +26,7 @@ export class UserRepositoryMock implements IUserRepository {
   private userCounter: number = 2
 
   async getUser(id: number): Promise<User> {
-    const user = this.users.find(user => user.id === id)
+    const user = this.users.find((user) => user.id === id)
     if (!user) {
       throw new NoItemsFound('id')
     }
@@ -42,8 +42,12 @@ export class UserRepositoryMock implements IUserRepository {
     return user
   }
 
-  async updateUser(id: number, newName: string, newEmail: string): Promise<User> {
-    const user = this.users.find(user => user.id === id)
+  async updateUser(
+    id: number,
+    newName: string,
+    newEmail: string,
+  ): Promise<User> {
+    const user = this.users.find((user) => user.id === id)
     if (!user) {
       throw new NoItemsFound('id')
     }
@@ -53,11 +57,11 @@ export class UserRepositoryMock implements IUserRepository {
   }
 
   async deleteUser(id: number): Promise<User> {
-    const user = this.users.find(user => user.id === id)
+    const user = this.users.find((user) => user.id === id)
     if (!user) {
       throw new NoItemsFound('id')
     }
-    this.users = this.users.filter(user => user.id !== id)
+    this.users = this.users.filter((user) => user.id !== id)
     return user
   }
 
