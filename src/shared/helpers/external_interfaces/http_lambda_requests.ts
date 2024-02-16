@@ -88,7 +88,7 @@ class LambdaHttpRequest extends HttpRequest {
     this.raw_query_string = data.rawQueryString
     this.query_string_parameters = data.queryStringParameters
     this.request_context = data.requestContext
-    this.http = new LambdaDefaultHTTP(this.request_context.external_interfaces)
+    this.http = new LambdaDefaultHTTP(this.request_context?.external_interfaces) //here ? operator 
   }
 }
 
