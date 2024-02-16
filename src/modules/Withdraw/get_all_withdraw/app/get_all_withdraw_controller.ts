@@ -1,13 +1,12 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unused-vars */
-
 import { GetAllWithdrawsUsecase } from './get_all_withdraw_usecase'
 import { GetAllWithdrawViewmodel } from './get_all_withdraw_viewmodel'
 import {
-  OK,
-  NotFound,
   BadRequest,
   InternalServerError,
+  NotFound,
+  OK,
 } from '../../../../shared/helpers/external_interfaces/http_codes'
 import { IRequest } from '@/shared/helpers/external_interfaces/external_interface'
 import { EntityError } from '@/shared/helpers/errors/domain_errors'
@@ -15,6 +14,7 @@ import {
   MissingParameters,
   WrongTypeParameters,
 } from '@/shared/helpers/errors/controller_errors'
+import { NoItemsFound } from '@/shared/helpers/errors/usecase_errors'
 
 export class GetAllWithdrawsController {
   constructor(private usecase: GetAllWithdrawsUsecase) {}
@@ -25,27 +25,19 @@ export class GetAllWithdrawsController {
       const viewModel = new GetAllWithdrawViewmodel(withdraws)
       return new OK(viewModel.toJSON())
     } catch (error) {
-      const err = error as Error
+      if (error instanceof NoItemsFound) {
+        return new NotFound(error.message)
+      }
       if (
-        err instanceof NotFound ||
-        err instanceof BadRequest ||
-        err instanceof InternalServerError
+        error instanceof MissingParameters ||
+        error instanceof WrongTypeParameters ||
+        error instanceof EntityError
       ) {
-        return this.handleKnownErrors(err)
-      } else {
-        return new InternalServerError(err.message)
+        return new BadRequest(error.message)
+      }
+      if (error instanceof Error) {
+        return new InternalServerError(error.message)
       }
     }
-  }
-
-  private handleKnownErrors(error: Error) {
-    if (
-      error instanceof MissingParameters ||
-      error instanceof WrongTypeParameters ||
-      error instanceof EntityError
-    ) {
-      return new BadRequest(error.message)
-    }
-    return error
   }
 }
