@@ -8,13 +8,13 @@ import {
   NotFound,
   OK,
 } from '../../../../shared/helpers/external_interfaces/http_codes'
-import { IRequest } from '@/shared/helpers/external_interfaces/external_interface'
-import { EntityError } from '@/shared/helpers/errors/domain_errors'
+import { IRequest } from '../../../../shared/helpers/external_interfaces/external_interface'
+import { EntityError } from '../../../../shared/helpers/errors/domain_errors'
 import {
   MissingParameters,
   WrongTypeParameters,
-} from '@/shared/helpers/errors/controller_errors'
-import { NoItemsFound } from '@/shared/helpers/errors/usecase_errors'
+} from '../../../../shared/helpers/errors/controller_errors'
+import { NoItemsFound } from '../../../../shared/helpers/errors/usecase_errors'
 
 export class GetAllWithdrawsController {
   constructor(private usecase: GetAllWithdrawsUsecase) {}
