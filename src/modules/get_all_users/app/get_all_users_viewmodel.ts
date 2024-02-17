@@ -16,10 +16,10 @@ export class UserViewmodel {
 
   toJSON() {
     return {
-      'id': this.id,
-      'name': this.name,
-      'email': this.email,
-      'state': this.state,
+      id: this.id,
+      name: this.name,
+      email: this.email,
+      state: this.state,
     }
   }
 }
@@ -33,8 +33,8 @@ export class GetAllUsersViewmodel {
 
   toJSON() {
     return {
-      'users': this.users.map((user) => user.toJSON()),
-      'message': 'All users have been retrieved successfully',
+      users: this.users.map((user) => user.toJSON()),
+      message: 'All users have been retrieved successfully',
     }
   }
 }

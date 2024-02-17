@@ -139,18 +139,19 @@ export class Withdraw {
   }
 
   static validateTime(time: number): boolean {
-    if (time === null || time === undefined) {
+    if (
+      time === null ||
+      time === undefined ||
+      typeof time !== 'number' ||
+      isNaN(time)
+    ) {
       return false
     }
 
-    if (typeof time !== 'number' || isNaN(time)) {
-      return false
-    }
+    const minValidTime = new Date('1970-01-01').getTime()
+    const maxValidTime = new Date('2100-01-01').getTime()
 
-    if (time < 1641006000000) {
-      return false
-    }
-    return true
+    return time >= minValidTime && time <= maxValidTime
   }
 
   static validateState(state: STATE): boolean {
