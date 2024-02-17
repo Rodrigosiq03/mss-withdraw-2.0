@@ -9,14 +9,14 @@ export class WithdrawRepositoryMock implements IWithdrawRepository {
       withdrawId: '1',
       notebookSerialNumber: 'ABC123',
       studentRA: '23.00335-9',
-      initTime: Date.now(),
+      initTime: 1704074148000,
       state: STATE.PENDING,
     }),
     new Withdraw({
       withdrawId: '2',
       notebookSerialNumber: 'DEF456',
       studentRA: '23.00444-8',
-      initTime: Date.now(),
+      initTime: 1704074148000,
       state: STATE.PENDING,
     }),
   ]
