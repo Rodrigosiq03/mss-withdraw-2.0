@@ -4,12 +4,11 @@ import { IWithdrawRepository } from './domain/repositories/withdraw_repository_i
 import { UserRepositoryDynamo } from './infra/repositories/user_repository_dynamo'
 import { UserRepositoryMock } from './infra/repositories/user_repository_mock'
 import { config } from 'dotenv'
+import { WithdrawRepositoryMock } from './infra/repositories/withdraw_repository_mock'
+import { WithdrawRepositoryDynamo } from './infra/repositories/withdraw_repository_dynamo'
 config()
 
 export class Environments {
-  static getWithdrawRepo(): IWithdrawRepository {
-    throw new Error('Method not implemented.')
-  }
   stage: STAGE = STAGE.TEST
   s3BucketName: string = ''
   region: string = ''
@@ -92,6 +91,20 @@ export class Environments {
       Environments.getEnvs().stage === STAGE.PROD
     ) {
       return new UserRepositoryDynamo()
+    } else {
+      throw new Error('Invalid STAGE')
+    }
+  }
+
+  static getWithdrawRepo(): IWithdrawRepository {
+    if (Environments.getEnvs().stage === STAGE.TEST) {
+      // Retorna uma instância do seu repositório mock para testes
+      return new WithdrawRepositoryMock()
+    } else if (
+      Environments.getEnvs().stage === STAGE.DEV ||
+      Environments.getEnvs().stage === STAGE.PROD
+    ) {
+      return new WithdrawRepositoryDynamo()
     } else {
       throw new Error('Invalid STAGE')
     }
