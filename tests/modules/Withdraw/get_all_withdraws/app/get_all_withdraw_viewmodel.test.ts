@@ -31,7 +31,7 @@ describe('Assert Get All Withdraws viewmodel is correct at all', () => {
       withdraws: [
         {
           id: '1',
-          serialNumber: 'ABC123',
+          notebookSerialNumber: 'ABC123',
           studentRA: '23.00335-9',
           initTime: 1641006000000,
           finishTime: undefined,
@@ -39,7 +39,7 @@ describe('Assert Get All Withdraws viewmodel is correct at all', () => {
         },
         {
           id: '2',
-          serialNumber: 'XYZ456',
+          notebookSerialNumber: 'XYZ456',
           studentRA: '78.90123-4',
           initTime: 1641006000000,
           finishTime: undefined,
@@ -57,7 +57,7 @@ describe('Assert Get All Withdraws viewmodel is correct at all', () => {
 
     const expected = {
       id: '1',
-      serialNumber: 'ABC123',
+      notebookSerialNumber: 'ABC123',
       studentRA: '23.00335-9',
       initTime: 1641006000000,
       finishTime: undefined,
