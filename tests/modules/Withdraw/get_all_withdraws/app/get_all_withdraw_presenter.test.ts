@@ -72,20 +72,6 @@ describe('Assert Get All Withdraws presenter is correct at all', () => {
         },
       ],
     }
-    // new Withdraw({
-    //   withdrawId: '1',
-    //   notebookSerialNumber: 'ABC123',
-    //   studentRA: '23.00335-9',
-    //   initTime: 1704074148000,
-    //   state: STATE.PENDING,
-    // }),
-    // new Withdraw({
-    //   withdrawId: '2',
-    //   notebookSerialNumber: 'DEF456',
-    //   studentRA: '23.00444-8',
-    //   initTime: 1704074148000,
-    //   state: STATE.PENDING,
-    // }),
 
     const response = await getAllWithdrawsPresenter(event)
 
