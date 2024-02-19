@@ -14,7 +14,7 @@ import {
   MissingParameters,
   WrongTypeParameters,
 } from '../../../../shared/helpers/errors/controller_errors'
-import { NoItemsFound } from '@/shared/helpers/errors/usecase_errors'
+import { NoItemsFound } from '../../../../../src/shared/helpers/errors/usecase_errors'
 
 export class GetWithdrawByRAController {
   constructor(private usecase: GetWithdrawUseCase) {}
@@ -37,7 +37,6 @@ export class GetWithdrawByRAController {
       const viewModel = new WithdrawViewModel(withdraw)
 
       return new OK(viewModel.toJSON())
-      
     } catch (error: any) {
       if (error instanceof NoItemsFound) {
         return new NotFound(error.message)
