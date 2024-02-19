@@ -33,7 +33,7 @@ export class GetWithdrawByRAController {
       }
 
       const studentRA = request.data.studentRA
-      const withdraw = await this.usecase.execute(String(studentRA))
+      const withdraw = await this.usecase.execute(studentRA)
       const viewModel = new WithdrawViewModel(withdraw)
 
       return new OK(viewModel.toJSON())

@@ -26,6 +26,7 @@ export class WithdrawViewModel {
       initTime: this.initTime,
       finishTime: this.finishTime,
       state: this.state,
+      message: 'Withdraw has been retrieved successfully',
     }
   }
 }

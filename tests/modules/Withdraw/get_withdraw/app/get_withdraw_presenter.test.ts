@@ -14,7 +14,7 @@ describe('Assert Get Withdraw presenter is correct at all', () => {
         header2: 'value1,value2',
       },
       queryStringParameters: {
-        ra: '23.00335-9',
+        studentRA: '23.00335-9',
       },
       requestContext: {
         accountId: '123456789012',
@@ -57,14 +57,12 @@ describe('Assert Get Withdraw presenter is correct at all', () => {
     expect(response?.statusCode).toEqual(200)
     expect(response?.body).toEqual(
       JSON.stringify({
+        id: '1',
+        notebookSerialNumber: 'ABC123',
+        studentRA: '23.00335-9',
+        initTime: 1704074148000,
+        state: 'PENDING',
         message: 'Withdraw has been retrieved successfully',
-        withdraw: {
-          id: '1',
-          notebookSerialNumber: 'ABC123',
-          studentRA: '23.00335-9',
-          initTime: 1704074148000,
-          state: 'PENDING',
-        },
       }),
     )
   })
