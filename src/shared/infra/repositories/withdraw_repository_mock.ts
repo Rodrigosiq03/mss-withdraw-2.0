@@ -29,7 +29,7 @@ export class WithdrawRepositoryMock implements IWithdrawRepository {
   async getWithdrawByRA(ra: string): Promise<Withdraw> {
     const withdraw = this.withdraws.find((w) => w.studentRA === ra)
     if (!withdraw) {
-      throw new NoItemsFound('props.studentRA')
+      throw new NoItemsFound('studentRA')
     }
     return withdraw
   }

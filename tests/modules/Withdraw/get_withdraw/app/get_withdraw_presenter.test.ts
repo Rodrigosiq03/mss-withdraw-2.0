@@ -1,9 +1,8 @@
-import { describe, it, expect } from 'vitest' 
-import { getAllWithdrawsPresenter } from '../../../../../src/modules/Withdraw/get_all_withdraw/app/get_all_withdraw_presenter'
-import { STATE } from '../../../../../src/shared/domain/enums/state_enum'
+import { expect, it, describe } from 'vitest'
+import { handler } from '../../.././../../src/modules/Withdraw/get_withdraw/app/get_withdraw_presenter'
 
-describe('Assert Get All Withdraws presenter is correct at all', () => {
-  it('Should activate presenter correctly', async () => {
+describe('Assert Get Withdraw presenter is correct at all', () => {
+  it('Assert Get Withdraw presenter is correct when creating', async () => {
     const event = {
       version: '2.0',
       routeKey: '$default',
@@ -15,7 +14,7 @@ describe('Assert Get All Withdraws presenter is correct at all', () => {
         header2: 'value1,value2',
       },
       queryStringParameters: {
-        parameter1: 'value1',
+        studentRA: '23.00335-9',
       },
       requestContext: {
         accountId: '123456789012',
@@ -28,7 +27,7 @@ describe('Assert Get All Withdraws presenter is correct at all', () => {
             callerId: 'AIDA...',
             cognitoIdentity: null,
             principalOrgId: null,
-            userArn: 'arn:aws:iam::111122223333:user_id/example-user_id',
+            userArn: 'arn:aws:iam::111122223333:user/example-user',
             userId: 'AIDA...',
           },
         },
@@ -53,29 +52,18 @@ describe('Assert Get All Withdraws presenter is correct at all', () => {
       stageVariables: null,
     }
 
-    const expectedBody = {
-      message: 'All withdraws have been retrieved successfully',
-      withdraws: [
-        {
-          id: '1',
-          notebookSerialNumber: 'ABC123',
-          studentRA: '23.00335-9',
-          initTime: 1704074148000,
-          state: STATE.PENDING,
-        },
-        {
-          id: '2',
-          notebookSerialNumber: 'DEF456',
-          studentRA: '23.00444-8',
-          initTime: 1704074148000,
-          state: STATE.PENDING,
-        },
-      ],
-    }
+    const response = await handler(event, null)
 
-    const response = await getAllWithdrawsPresenter(event)
-
-    expect(response['statusCode']).toEqual(200)
-    expect(JSON.parse(response['body'])).toEqual(expectedBody)
+    expect(response?.statusCode).toEqual(200)
+    expect(response?.body).toEqual(
+      JSON.stringify({
+        id: '1',
+        notebookSerialNumber: 'ABC123',
+        studentRA: '23.00335-9',
+        initTime: 1704074148000,
+        state: 'PENDING',
+        message: 'Withdraw has been retrieved successfully',
+      }),
+    )
   })
 })
