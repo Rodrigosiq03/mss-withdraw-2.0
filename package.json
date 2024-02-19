@@ -11,7 +11,7 @@
     "build:watch": "tsc -w",
     "lint": "eslint --ext .ts src",
     "lint:fix": "eslint --fix --ext .ts src",
-    "test": "vitest --no-watch"
+    "test": "vitest"
   },
   "dependencies": {
     "@aws-sdk/client-dynamodb": "^3.461.0",
