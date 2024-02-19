@@ -22,6 +22,8 @@ describe('Assert Get Withdraw viewmodel is correct at all', () => {
       'studentRA': '23.00335-9',
       'initTime': 1704074148000,
       'state': 'PENDING',
+      'finishTime': undefined,
+      'message': 'Withdraw has been retrieved successfully'
     })
   })
 })
