@@ -1,4 +1,4 @@
-import { Withdraw } from '@/shared/domain/entities/withdraw'
+import { Withdraw } from '../../../../../src/shared/domain/entities/withdraw'
 import { STATE } from '../../../../.././src/shared/domain/enums/state_enum'
 import { IWithdrawRepository } from '../../../../.././src/shared/domain/repositories/withdraw_repository_interface'
 import { EntityError } from '../../../../.././src/shared/helpers/errors/domain_errors'
