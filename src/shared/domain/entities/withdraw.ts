@@ -105,7 +105,7 @@ export class Withdraw {
     return this.props.state ?? STATE.PENDING
   }
 
-  set state(state: STATE) {
+  set setState(state: STATE) {
     if (!Withdraw.validateState(state)) {
       throw new EntityError('state')
     }
