@@ -1,7 +1,8 @@
 export enum STATE {
   APPROVED = 'APPROVED',
   PENDING = 'PENDING',
-  REJECTED = 'REJECTED'
+  REJECTED = 'REJECTED',
+  INACTIVE = 'INACTIVE',
 }
 
 export function toEnum(value: string): STATE {
@@ -12,6 +13,8 @@ export function toEnum(value: string): STATE {
       return STATE.PENDING
     case 'REJECTED':
       return STATE.REJECTED
+    case 'INACTIVE':
+      return STATE.INACTIVE
     default:
       throw new Error('Invalid value')
   }
