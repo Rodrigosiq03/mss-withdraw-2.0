@@ -25,7 +25,7 @@ export class WithdrawRepositoryMock implements IWithdrawRepository {
     }),
     new Withdraw({
       notebookSerialNumber: 'JKL012',
-      studentRA: '23.00666-6',
+      studentRA: '23.00656-6',
       name: 'Thiago Veigh',
       initTime: 1704074148000,
       state: STATE.PENDING,

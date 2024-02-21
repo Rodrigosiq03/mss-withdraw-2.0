@@ -13,9 +13,9 @@ describe('WithdrawRepositoryMock', () => {
 
   it('should create withdraw', async () => {
     const newWithdraw = new Withdraw({
-      withdrawId: '3',
       notebookSerialNumber: 'GHI789',
       studentRA: '23.00555-7',
+      name: 'Matue',
       initTime: Date.now(),
       state: STATE.PENDING,
     })
@@ -26,9 +26,9 @@ describe('WithdrawRepositoryMock', () => {
   })
 
   it('should get withdraw by RA', async () => {
-    const withdraw = await repository.getWithdrawByRA('23.00335-9')
+    const withdraw = await repository.getWithdrawByRA('23.00555-7')
 
-    expect(withdraw?.studentRA).toEqual('23.00335-9')
+    expect(withdraw?.studentRA).toEqual('23.00555-7')
   })
 
   it('should throw error when getting withdraw by non-existing RA', async () => {
@@ -40,11 +40,18 @@ describe('WithdrawRepositoryMock', () => {
   it('should get all withdraws', async () => {
     const withdraws = await repository.getAllWithdraws()
 
-    expect(withdraws.length).toBe(2)
+   
+    expect(withdraws.length).toBe(4) 
+    expect(
+      withdraws.some((withdraw) => withdraw.state === STATE.PENDING),
+    ).toBeTruthy() 
+    expect(
+      withdraws.some((withdraw) => withdraw.state === STATE.INACTIVE),
+    ).toBeTruthy() 
   })
 
   it('should delete withdraw by RA', async () => {
-    const raToDelete = '23.00335-9'
+    const raToDelete = '23.00555-7'
     await expect(repository.deleteWithdrawByRA(raToDelete)).resolves.toBe(true)
 
     const withdrawsAfterDelete = await repository.getAllWithdraws()
