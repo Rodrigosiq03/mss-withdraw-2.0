@@ -25,6 +25,20 @@ describe('WithdrawRepositoryMock', () => {
     )
   })
 
+  it('should create withdraw and change its state from inactive to pending', async () => {
+    const newWithdraw = new Withdraw({
+      notebookSerialNumber: 'ABC123',
+      state: STATE.INACTIVE,
+    })
+
+    await expect(repository.createWithdraw(newWithdraw)).resolves.toEqual(
+      expect.objectContaining({
+        notebookSerialNumber: 'ABC123',
+        state: STATE.PENDING,
+      }),
+    )
+  })
+
   it('should get withdraw by RA', async () => {
     const withdraw = await repository.getWithdrawByRA('23.00555-7')
 
@@ -40,14 +54,13 @@ describe('WithdrawRepositoryMock', () => {
   it('should get all withdraws', async () => {
     const withdraws = await repository.getAllWithdraws()
 
-   
-    expect(withdraws.length).toBe(4) 
+    expect(withdraws.length).toBe(4)
     expect(
       withdraws.some((withdraw) => withdraw.state === STATE.PENDING),
-    ).toBeTruthy() 
+    ).toBeTruthy()
     expect(
       withdraws.some((withdraw) => withdraw.state === STATE.INACTIVE),
-    ).toBeTruthy() 
+    ).toBeTruthy()
   })
 
   it('should delete withdraw by RA', async () => {

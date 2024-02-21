@@ -33,12 +33,17 @@ export class WithdrawRepositoryMock implements IWithdrawRepository {
   ]
 
   async createWithdraw(withdraw: Withdraw): Promise<Withdraw> {
-    if (withdraw.state === STATE.INACTIVE) {
-      this.inactiveWithdraws.push(withdraw)
+    const existingWithdraw = this.inactiveWithdraws.find(
+      (w) => w.notebookSerialNumber === withdraw.notebookSerialNumber,
+    )
+
+    if (existingWithdraw) {
+      existingWithdraw.setState(STATE.PENDING)
+      return existingWithdraw
     } else {
       this.activeWithdraws.push(withdraw)
+      return withdraw
     }
-    return withdraw
   }
 
   async getWithdrawByRA(ra: string): Promise<Withdraw> {
