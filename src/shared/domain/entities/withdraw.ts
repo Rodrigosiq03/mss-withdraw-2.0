@@ -2,37 +2,33 @@ import { EntityError } from '../../helpers/errors/domain_errors'
 import { STATE } from '../enums/state_enum'
 
 export interface WithdrawProps {
-  withdrawId: string
   notebookSerialNumber: string
-  studentRA: string
-  initTime: number
+  studentRA?: string
+  name?: string
+  initTime?: number
   finishTime?: number
-  state?: STATE
+  state: STATE
 }
 
 export class Withdraw {
   constructor(public props: WithdrawProps) {
-    if (!Withdraw.validateWithdrawId(props.withdrawId)) {
-      throw new EntityError('props.withdrawId')
+    this.validateProps(props)
+  }
+
+  private validateProps(props: WithdrawProps) {
+    if (!this.validateNotebookSerialNumber(props.notebookSerialNumber)) {
+      throw new EntityError('notebookSerialNumber')
     }
 
-    if (!Withdraw.validateNotebookSerialNumber(props.notebookSerialNumber)) {
-      throw new EntityError('props.notebookSerialNumber')
-    }
-
-    if (!Withdraw.validateStudentRA(props.studentRA)) {
-      throw new EntityError('props.studentRA')
-    }
-
-    if (!Withdraw.validateTime(props.initTime)) {
-      throw new EntityError('props.initTime')
+    if (props.initTime !== undefined && !this.validateTime(props.initTime)) {
+      throw new EntityError('initTime')
     }
 
     if (
       props.finishTime !== undefined &&
-      !Withdraw.validateTime(props.finishTime)
+      !this.validateTime(props.finishTime)
     ) {
-      throw new EntityError('props.finishTime')
+      throw new EntityError('finishTime')
     }
 
     if (
@@ -41,28 +37,17 @@ export class Withdraw {
       props.finishTime < props.initTime
     ) {
       throw new EntityError(
-        'props.initTime and props.finishTime must be in the correct order',
+        'initTime and finishTime must be in the correct order',
       )
     }
-  }
-
-  get withdrawId() {
-    return this.props.withdrawId
-  }
-
-  set setWithdrawId(withdrawId: string) {
-    if (!Withdraw.validateWithdrawId(withdrawId)) {
-      throw new EntityError('withdrawId')
-    }
-    this.props.withdrawId = withdrawId
   }
 
   get notebookSerialNumber() {
     return this.props.notebookSerialNumber
   }
 
-  set setNotebookSerialNumber(notebookSerialNumber: string) {
-    if (!Withdraw.validateNotebookSerialNumber(notebookSerialNumber)) {
+  setnotebookSerialNumber(notebookSerialNumber: string) {
+    if (!this.validateNotebookSerialNumber(notebookSerialNumber)) {
       throw new EntityError('notebookSerialNumber')
     }
     this.props.notebookSerialNumber = notebookSerialNumber
@@ -72,20 +57,28 @@ export class Withdraw {
     return this.props.studentRA
   }
 
-  set setStudentRA(studentRA: string) {
-    if (!Withdraw.validateStudentRA(studentRA)) {
+  setStudentRA(studentRA: string) {
+    if (!this.validateStudentRA(studentRA)) {
       throw new EntityError('studentRA')
     }
     this.props.studentRA = studentRA
+  }
+
+  get name() {
+    return this.props.name
+  }
+
+  setName(name: string) {
+    this.props.name = name
   }
 
   get initTime() {
     return this.props.initTime
   }
 
-  set setInitTime(initTime: number) {
-    if (!Withdraw.validateTime(initTime)) {
-      throw new EntityError('withdrawalTime')
+  setInitTime(initTime: number) {
+    if (!this.validateTime(initTime)) {
+      throw new EntityError('initTime')
     }
     this.props.initTime = initTime
   }
@@ -94,8 +87,8 @@ export class Withdraw {
     return this.props.finishTime
   }
 
-  set setFinishTime(finishTime: number) {
-    if (finishTime !== undefined && !Withdraw.validateTime(finishTime)) {
+  setFinishTime(finishTime: number) {
+    if (finishTime !== undefined && !this.validateTime(finishTime)) {
       throw new EntityError('finishTime')
     }
     this.props.finishTime = finishTime
@@ -105,23 +98,14 @@ export class Withdraw {
     return this.props.state ?? STATE.PENDING
   }
 
-  set setState(state: STATE) {
-    if (!Withdraw.validateState(state)) {
+  setState(state: STATE) {
+    if (!this.validateState(state)) {
       throw new EntityError('state')
     }
     this.props.state = state
   }
 
-  static validateWithdrawId(withdrawId: string): boolean {
-    return (
-      withdrawId !== undefined &&
-      withdrawId !== null &&
-      typeof withdrawId === 'string' &&
-      withdrawId.trim().length > 0
-    )
-  }
-
-  static validateNotebookSerialNumber(notebookSerialNumber: string): boolean {
+  private validateNotebookSerialNumber(notebookSerialNumber: string): boolean {
     return (
       notebookSerialNumber !== undefined &&
       notebookSerialNumber !== null &&
@@ -132,13 +116,12 @@ export class Withdraw {
     )
   }
 
-  static validateStudentRA(studentRA: string): boolean {
+  private validateStudentRA(studentRA: string): boolean {
     const raPattern = /^\d{2}\.\d{5}-[0-9]$/
-
     return raPattern.test(studentRA)
   }
 
-  static validateTime(time: number): boolean {
+  private validateTime(time: number | undefined): boolean {
     if (
       time === null ||
       time === undefined ||
@@ -154,7 +137,7 @@ export class Withdraw {
     return time >= minValidTime && time <= maxValidTime
   }
 
-  static validateState(state: STATE): boolean {
+  private validateState(state: STATE): boolean {
     return Object.values(STATE).includes(state)
   }
 }
