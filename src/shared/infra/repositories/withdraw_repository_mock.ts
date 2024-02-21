@@ -4,30 +4,45 @@ import { IWithdrawRepository } from '../../domain/repositories/withdraw_reposito
 import { NoItemsFound } from '../../helpers/errors/usecase_errors'
 
 export class WithdrawRepositoryMock implements IWithdrawRepository {
-  private withdraws: Withdraw[] = [
+  private inactiveWithdraws: Withdraw[] = [
     new Withdraw({
-      withdrawId: '1',
       notebookSerialNumber: 'ABC123',
-      studentRA: '23.00335-9',
+      state: STATE.INACTIVE,
+    }),
+    new Withdraw({
+      notebookSerialNumber: 'DEF456',
+      state: STATE.INACTIVE,
+    }),
+  ]
+
+  private activeWithdraws: Withdraw[] = [
+    new Withdraw({
+      notebookSerialNumber: 'GHI789',
+      studentRA: '23.00555-7',
+      name: 'Matue',
       initTime: 1704074148000,
       state: STATE.PENDING,
     }),
     new Withdraw({
-      withdrawId: '2',
-      notebookSerialNumber: 'DEF456',
-      studentRA: '23.00444-8',
+      notebookSerialNumber: 'JKL012',
+      studentRA: '23.00666-6',
+      name: 'Thiago Veigh',
       initTime: 1704074148000,
       state: STATE.PENDING,
     }),
   ]
 
   async createWithdraw(withdraw: Withdraw): Promise<Withdraw> {
-    this.withdraws.push(withdraw)
+    if (withdraw.state === STATE.INACTIVE) {
+      this.inactiveWithdraws.push(withdraw)
+    } else {
+      this.activeWithdraws.push(withdraw)
+    }
     return withdraw
   }
 
   async getWithdrawByRA(ra: string): Promise<Withdraw> {
-    const withdraw = this.withdraws.find((w) => w.studentRA === ra)
+    const withdraw = this.activeWithdraws.find((w) => w.studentRA === ra)
     if (!withdraw) {
       throw new NoItemsFound('studentRA')
     }
@@ -35,15 +50,27 @@ export class WithdrawRepositoryMock implements IWithdrawRepository {
   }
 
   async getAllWithdraws(): Promise<Withdraw[]> {
-    return this.withdraws
+    return [...this.inactiveWithdraws, ...this.activeWithdraws]
   }
 
   async deleteWithdrawByRA(ra: string): Promise<boolean> {
-    const index = this.withdraws.findIndex((w) => w.studentRA === ra)
+    const index = this.activeWithdraws.findIndex((w) => w.studentRA === ra)
     if (index === -1) {
       throw new NoItemsFound('props.studentRA')
     }
-    this.withdraws.splice(index, 1)
+    this.activeWithdraws.splice(index, 1)
     return true
+  }
+
+  async updateWithdrawByRA(
+    ra: string,
+    updatedWithdraw: Withdraw,
+  ): Promise<Withdraw> {
+    const index = this.activeWithdraws.findIndex((w) => w.studentRA === ra)
+    if (index === -1) {
+      throw new NoItemsFound('props.studentRA')
+    }
+    this.activeWithdraws[index] = updatedWithdraw
+    return updatedWithdraw
   }
 }
