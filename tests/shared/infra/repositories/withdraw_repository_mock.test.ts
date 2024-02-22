@@ -63,21 +63,30 @@ describe('WithdrawRepositoryMock', () => {
     ).toBeTruthy()
   })
 
-  it('should delete withdraw by RA', async () => {
-    const raToDelete = '23.00555-7'
-    await expect(repository.deleteWithdrawByRA(raToDelete)).resolves.toBe(true)
 
-    const withdrawsAfterDelete = await repository.getAllWithdraws()
-    expect(
-      withdrawsAfterDelete.find(
-        (withdraw) => withdraw.studentRA === raToDelete,
-      ),
-    ).toBeUndefined()
+  it('should update withdraw state to approved', async () => {
+    const raToUpdate = '23.00555-7'
+    const updatedWithdraw = await repository.updateWithdrawByRA(
+      raToUpdate,
+      true,
+    )
+
+    expect(updatedWithdraw?.state).toBe(STATE.APPROVED)
   })
 
-  it('should throw error when deleting withdraw with non-existing RA', async () => {
+  it('should update withdraw state to inactive', async () => {
+    const raToUpdate = '23.00555-7'
+    const updatedWithdraw = await repository.updateWithdrawByRA(
+      raToUpdate,
+      false,
+    )
+
+    expect(updatedWithdraw?.state).toBe(STATE.INACTIVE)
+  })
+
+  it('should throw error when updating withdraw with non-existing RA', async () => {
     await expect(
-      repository.deleteWithdrawByRA('non-existing-ra'),
+      repository.updateWithdrawByRA('non-existing-ra', true),
     ).rejects.toThrow(NoItemsFound)
   })
 })
