@@ -32,15 +32,27 @@ export class WithdrawRepositoryMock implements IWithdrawRepository {
     }),
   ]
 
-  async createWithdraw(withdraw: Withdraw): Promise<Withdraw> {
+  async createWithdraw(
+    notebookSerialNumber: string,
+    studentRA: string,
+    name: string,
+    initTime: number,
+  ): Promise<Withdraw> {
     const existingWithdraw = this.inactiveWithdraws.find(
-      (w) => w.notebookSerialNumber === withdraw.notebookSerialNumber,
+      (w) => w.notebookSerialNumber === notebookSerialNumber,
     )
 
     if (existingWithdraw) {
       existingWithdraw.setState(STATE.PENDING)
       return existingWithdraw
     } else {
+      const withdraw = new Withdraw({
+        notebookSerialNumber,
+        studentRA,
+        name,
+        initTime,
+        state: STATE.PENDING,
+      })
       this.activeWithdraws.push(withdraw)
       return withdraw
     }
@@ -58,10 +70,7 @@ export class WithdrawRepositoryMock implements IWithdrawRepository {
     return [...this.inactiveWithdraws, ...this.activeWithdraws]
   }
 
-  async updateWithdrawByRA(
-    ra: string,
-    isChecked: boolean,
-  ): Promise<Withdraw> {
+  async updateWithdrawByRA(ra: string, isChecked: boolean): Promise<Withdraw> {
     const index = this.activeWithdraws.findIndex((w) => w.studentRA === ra)
     if (index === -1) {
       throw new NoItemsFound('props.studentRA')
