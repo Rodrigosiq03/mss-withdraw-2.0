@@ -1,28 +1,28 @@
-import { Withdraw } from '../../../../shared/domain/entities/withdraw'
-import { STATE } from '@/shared/domain/enums/state_enum'
+import { WithdrawProps } from '../../../../shared/domain/entities/withdraw'
+import { STATE } from '../../../../../src/shared/domain/enums/state_enum'
 
-export class WithdrawViewmodel {
-  private id: string
+export class WithdrawViewModel {
   private notebookSerialNumber: string
-  private studentRA: string
-  private initTime: number
-  private finishTime?: number
+  private studentRA: string | undefined
+  private name: string | undefined
+  private initTime: number | undefined
+  private finishTime: number | undefined
   private state: STATE
 
-  constructor(withdraw: Withdraw) {
-    this.id = withdraw.withdrawId
+  constructor(withdraw: WithdrawProps) {
     this.notebookSerialNumber = withdraw.notebookSerialNumber
     this.studentRA = withdraw.studentRA
+    this.name = withdraw.name
     this.initTime = withdraw.initTime
     this.finishTime = withdraw.finishTime
-    this.state = withdraw.state as STATE
+    this.state = withdraw.state
   }
 
   toJSON() {
     return {
-      id: this.id,
       notebookSerialNumber: this.notebookSerialNumber,
       studentRA: this.studentRA,
+      name: this.name,
       initTime: this.initTime,
       finishTime: this.finishTime,
       state: this.state,
@@ -30,12 +30,12 @@ export class WithdrawViewmodel {
   }
 }
 
-export class GetAllWithdrawViewmodel {
-  private withdraws: WithdrawViewmodel[]
+export class GetAllWithdrawsViewModel {
+  private withdraws: WithdrawViewModel[]
 
-  constructor(withdraws: Withdraw[]) {
+  constructor(withdraws: WithdrawProps[]) {
     this.withdraws = withdraws.map(
-      (withdraw) => new WithdrawViewmodel(withdraw),
+      (withdraw) => new WithdrawViewModel(withdraw),
     )
   }
 
