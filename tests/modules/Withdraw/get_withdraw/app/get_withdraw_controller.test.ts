@@ -11,15 +11,15 @@ describe('Assert Get All Withdraws controller is correct at all', () => {
     const controller = new GetWithdrawByRAController(usecase)
 
     const request = new HttpRequest(undefined, undefined, {
-      studentRA: '23.00335-9',
+      studentRA: '23.00555-7',
     })
 
     const response = await controller.handle(request)
 
     expect(response?.statusCode).toEqual(200)
-    expect(response?.body['id']).toEqual('1')
-    expect(response?.body['notebookSerialNumber']).toEqual('ABC123')
-    expect(response?.body['studentRA']).toEqual('23.00335-9')
+    expect(response?.body['notebookSerialNumber']).toEqual('GHI789')
+    expect(response?.body['studentRA']).toEqual('23.00555-7')
+    expect(response?.body['name']).toEqual('Matue')
     expect(response?.body['initTime']).toEqual(1704074148000)
     expect(response?.body['state']).toEqual('PENDING')
     expect(response?.body['message']).toEqual(
@@ -60,7 +60,9 @@ describe('Assert Get All Withdraws controller is correct at all', () => {
     const usecase = new GetWithdrawUseCase(repo)
     const controller = new GetWithdrawByRAController(usecase)
 
-    const request = new HttpRequest(undefined, undefined, { studentRA: '22.00000-0' })
+    const request = new HttpRequest(undefined, undefined, {
+      studentRA: '22.00000-0',
+    })
 
     const response = await controller.handle(request)
 

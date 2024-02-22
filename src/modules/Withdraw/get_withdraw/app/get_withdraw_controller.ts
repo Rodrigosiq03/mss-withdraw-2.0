@@ -41,13 +41,11 @@ export class GetWithdrawByRAController {
       if (error instanceof NoItemsFound) {
         return new NotFound(error.message)
       }
-      if (error instanceof MissingParameters) {
-        return new BadRequest(error.message)
-      }
-      if (error instanceof WrongTypeParameters) {
-        return new BadRequest(error.message)
-      }
-      if (error instanceof EntityError) {
+      if (
+        error instanceof MissingParameters ||
+        error instanceof WrongTypeParameters ||
+        error instanceof EntityError
+      ) {
         return new BadRequest(error.message)
       }
       if (error instanceof Error) {
