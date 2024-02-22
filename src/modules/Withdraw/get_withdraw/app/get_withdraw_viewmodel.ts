@@ -2,29 +2,26 @@ import { Withdraw } from '../../../../shared/domain/entities/withdraw'
 import { STATE } from '../../../../shared/domain/enums/state_enum'
 
 export class WithdrawViewModel {
-  private id: string
   private notebookSerialNumber: string
   private studentRA: string
+  private name: string
   private initTime: number
-  private finishTime?: number
   private state: STATE
 
   constructor(withdraw: Withdraw) {
-    this.id = withdraw.withdrawId
-    this.notebookSerialNumber = withdraw.notebookSerialNumber
-    this.studentRA = withdraw.studentRA
-    this.initTime = withdraw.initTime
-    this.finishTime = withdraw.finishTime
-    this.state = withdraw.state as STATE
+    this.notebookSerialNumber = withdraw.props.notebookSerialNumber
+    this.studentRA = withdraw.props.studentRA ?? ''
+    this.name = withdraw.props.name ?? ''
+    this.initTime = withdraw.props.initTime ?? 0
+    this.state = withdraw.props.state
   }
 
   toJSON() {
     return {
-      id: this.id,
       notebookSerialNumber: this.notebookSerialNumber,
       studentRA: this.studentRA,
+      name: this.name,
       initTime: this.initTime,
-      finishTime: this.finishTime,
       state: this.state,
       message: 'Withdraw has been retrieved successfully',
     }
