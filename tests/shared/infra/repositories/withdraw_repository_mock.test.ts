@@ -1,5 +1,4 @@
 import { describe, it, expect, beforeEach } from 'vitest'
-import { Withdraw } from '../../../../src/shared/domain/entities/withdraw'
 import { STATE } from '../../../../src/shared/domain/enums/state_enum'
 import { WithdrawRepositoryMock } from '../../../../src/shared/infra/repositories/withdraw_repository_mock'
 import { NoItemsFound } from '../../../../src/shared/helpers/errors/usecase_errors'
@@ -12,29 +11,41 @@ describe('WithdrawRepositoryMock', () => {
   })
 
   it('should create withdraw', async () => {
-    const newWithdraw = new Withdraw({
-      notebookSerialNumber: 'GHI789',
-      studentRA: '23.00555-7',
-      name: 'Matue',
-      initTime: Date.now(),
-      state: STATE.PENDING,
-    })
+    const notebookSerialNumber = 'GHI789'
+    const state = STATE.PENDING
+    const studentRA = '23.00555-7'
+    const name = 'Matue'
+    const initTime = Date.now()
 
-    await expect(repository.createWithdraw(newWithdraw)).resolves.toEqual(
-      newWithdraw,
+
+    await expect(
+      repository.createWithdraw(
+        notebookSerialNumber,
+        studentRA,
+        name,
+        initTime,
+      ),
+    ).resolves.toEqual(
+      expect.objectContaining({
+        notebookSerialNumber,
+        state,
+        studentRA,
+        name,
+        initTime,
+      }),
     )
   })
 
   it('should create withdraw and change its state from inactive to pending', async () => {
-    const newWithdraw = new Withdraw({
-      notebookSerialNumber: 'ABC123',
-      state: STATE.INACTIVE,
-    })
+    const notebookSerialNumber = 'ABC123'
+    const state = STATE.PENDING
 
-    await expect(repository.createWithdraw(newWithdraw)).resolves.toEqual(
+    await expect(
+      repository.createWithdraw(notebookSerialNumber, '', '', 0),
+    ).resolves.toEqual(
       expect.objectContaining({
-        notebookSerialNumber: 'ABC123',
-        state: STATE.PENDING,
+        notebookSerialNumber,
+        state,
       }),
     )
   })
@@ -62,7 +73,6 @@ describe('WithdrawRepositoryMock', () => {
       withdraws.some((withdraw) => withdraw.state === STATE.INACTIVE),
     ).toBeTruthy()
   })
-
 
   it('should update withdraw state to approved', async () => {
     const raToUpdate = '23.00555-7'
