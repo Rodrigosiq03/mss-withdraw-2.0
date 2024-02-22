@@ -1,4 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+
+import jwt from 'jsonwebtoken'
 import {
   MissingParameters,
   WrongTypeParameters,
@@ -21,24 +23,30 @@ export class CreateWithdrawController {
 
   async handle(request: IRequest) {
     try {
+      const token = request.headers.authorization.split(' ')[1]
+
+      const decoded = jwt.decode(token) as any
+      if (!decoded) {
+        throw new Error('Invalid token')
+      }
+
+      const user = JSON.parse(decoded.user)
+
       const { notebookSerialNumber } = request.data as {
         notebookSerialNumber: string
       }
 
-      const name = 'Jose Aldo'
-      const studentRA = '22.12345-2'
-
       if (!notebookSerialNumber) {
         throw new MissingParameters('notebookSerialNumber')
       }
-      if (!name) {
+      if (!user.name) {
         throw new MissingParameters('name')
       }
-      if (!studentRA) {
+      if (!user.studentRA) {
         throw new MissingParameters('studentRA')
       }
 
-      if (!Withdraw.validateStudentRA(studentRA)) {
+      if (!Withdraw.validateStudentRA(user.studentRA)) {
         throw new EntityError('studentRA')
       }
 
@@ -46,8 +54,8 @@ export class CreateWithdrawController {
 
       const withdraw = await this.usecase.execute(
         notebookSerialNumber,
-        studentRA,
-        name,
+        user.studentRA,
+        user.name,
         initTime,
       )
 
