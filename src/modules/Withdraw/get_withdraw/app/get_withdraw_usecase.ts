@@ -1,6 +1,6 @@
 import { EntityError } from '../../../../../src/shared/helpers/errors/domain_errors'
 import { IWithdrawRepository } from '../../../../../src/shared/domain/repositories/withdraw_repository_interface'
-import { Withdraw } from '../../../../shared/domain/entities/withdraw'
+import { Withdraw } from '../../../../../src/shared/domain/entities/withdraw'
 
 export class GetWithdrawUseCase {
   constructor(private readonly withdrawRepository: IWithdrawRepository) {}
