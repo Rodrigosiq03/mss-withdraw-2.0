@@ -58,24 +58,21 @@ export class WithdrawRepositoryMock implements IWithdrawRepository {
     return [...this.inactiveWithdraws, ...this.activeWithdraws]
   }
 
-  async deleteWithdrawByRA(ra: string): Promise<boolean> {
-    const index = this.activeWithdraws.findIndex((w) => w.studentRA === ra)
-    if (index === -1) {
-      throw new NoItemsFound('props.studentRA')
-    }
-    this.activeWithdraws.splice(index, 1)
-    return true
-  }
-
   async updateWithdrawByRA(
     ra: string,
-    updatedWithdraw: Withdraw,
+    isChecked: boolean,
   ): Promise<Withdraw> {
     const index = this.activeWithdraws.findIndex((w) => w.studentRA === ra)
     if (index === -1) {
       throw new NoItemsFound('props.studentRA')
     }
-    this.activeWithdraws[index] = updatedWithdraw
-    return updatedWithdraw
+
+    if (isChecked) {
+      this.activeWithdraws[index].setState(STATE.APPROVED)
+    } else {
+      this.activeWithdraws[index].setState(STATE.INACTIVE)
+    }
+
+    return this.activeWithdraws[index]
   }
 }

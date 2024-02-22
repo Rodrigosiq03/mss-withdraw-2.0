@@ -4,6 +4,5 @@ export interface IWithdrawRepository {
   createWithdraw(withdraw: Withdraw): Promise<Withdraw>
   getWithdrawByRA(ra: string): Promise<Withdraw>
   getAllWithdraws(): Promise<Withdraw[]>
-  deleteWithdrawByRA(ra: string): Promise<boolean>
-  updateWithdrawByRA(ra: string, updatedWithdraw: Withdraw): Promise<Withdraw>
+  updateWithdrawByRA(ra: string, isChecked: boolean): Promise<Withdraw>
 }
