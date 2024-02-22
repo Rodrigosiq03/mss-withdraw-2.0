@@ -4,75 +4,51 @@ import {
   WrongTypeParameters,
 } from '../../../../shared/helpers/errors/controller_errors'
 import { EntityError } from '../../../../shared/helpers/errors/domain_errors'
-import { ForbiddenAction, NoItemsFound } from '../../../../shared/helpers/errors/usecase_errors'
 import { IRequest } from '../../../../shared/helpers/external_interfaces/external_interface'
 import {
   BadRequest,
   Created,
   InternalServerError,
   NotFound,
-  Unauthorized,
 } from '../../../../shared/helpers/external_interfaces/http_codes'
 import { CreateWithdrawUsecase } from '../../../../../src/modules/Withdraw/create_withdraw/app/create_withdraw_usecase'
 import { CreateViewmodel } from './create_withdraw_viewmodel'
+import { Withdraw } from '../../../../../src/shared/domain/entities/withdraw'
+import { NoItemsFound } from '../../../../shared/helpers/errors/usecase_errors'
 
 export class CreateWithdrawController {
   constructor(private usecase: CreateWithdrawUsecase) {}
 
-  async handle(request: IRequest, decoded: any) {
+  async handle(request: IRequest) {
     try {
-      if (decoded === undefined) {
-        throw new MissingParameters('token')
-      }
-      if (decoded.role === undefined || decoded.role !== 'STUDENT') {
-        throw new ForbiddenAction('type of user')
-      }
-      if (request.data.withdrawId === undefined) {
-        throw new MissingParameters('withdrawId')
-      }
-      if (request.data.notebookSerialNumber === undefined) {
-        throw new MissingParameters('notebookSerialNumber')
-      }
-      if (request.data.studentRA === undefined) {
-        throw new MissingParameters('studentRA')
-      }
-      if (request.data.initTime === undefined) {
-        throw new MissingParameters('initTime')
-      }
-      if (typeof request.data.withdrawId !== 'string') {
-        throw new WrongTypeParameters(
-          'withdrawId',
-          'string',
-          typeof request.data.withdrawId,
-        )
-      }
-      if (typeof request.data.notebookSerialNumber !== 'string') {
-        throw new WrongTypeParameters(
-          'notebookSerialNumber',
-          'string',
-          typeof request.data.notebookSerialNumber,
-        )
-      }
-      if (typeof request.data.studentRA !== 'string') {
-        throw new WrongTypeParameters(
-          'studentRA',
-          'string',
-          typeof request.data.studentRA,
-        )
-      }
-      if (typeof request.data.initTime !== 'number') {
-        throw new WrongTypeParameters(
-          'initTime',
-          'number',
-          typeof request.data.initTime,
-        )
+      const { notebookSerialNumber } = request.data as {
+        notebookSerialNumber: string
       }
 
+      const name = 'Jose Aldo'
+      const studentRA = '22.12345-2'
+
+      if (!notebookSerialNumber) {
+        throw new MissingParameters('notebookSerialNumber')
+      }
+      if (!name) {
+        throw new MissingParameters('name')
+      }
+      if (!studentRA) {
+        throw new MissingParameters('studentRA')
+      }
+
+      if (!Withdraw.validateStudentRA(studentRA)) {
+        throw new EntityError('studentRA')
+      }
+
+      const initTime = new Date().getTime()
+
       const withdraw = await this.usecase.execute(
-        request.data.withdrawId,
-        request.data.notebookSerialNumber,
-        request.data.studentRA,
-        request.data.initTime,
+        notebookSerialNumber,
+        studentRA,
+        name,
+        initTime,
       )
 
       const viewmodel = new CreateViewmodel(withdraw)
@@ -84,21 +60,14 @@ export class CreateWithdrawController {
       if (error instanceof NoItemsFound) {
         return new NotFound(error.message)
       }
-      if (error instanceof MissingParameters) {
+      if (
+        error instanceof MissingParameters ||
+        error instanceof WrongTypeParameters ||
+        error instanceof EntityError
+      ) {
         return new BadRequest(error.message)
       }
-      if (error instanceof WrongTypeParameters) {
-        return new BadRequest(error.message)
-      }
-      if (error instanceof EntityError) {
-        return new BadRequest(error.message)
-      }
-      if (error instanceof ForbiddenAction) {
-        return new Unauthorized(error.message)
-      }
-      if (error instanceof Error) {
-        return new InternalServerError(error.message)
-      }
+      return new InternalServerError(error.message)
     }
   }
 }
