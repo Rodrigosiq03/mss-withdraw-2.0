@@ -14,6 +14,7 @@ export class Environments {
   region: string = ''
   endpointUrl: string = ''
   dynamoTableName: string = ''
+  dynamoTableNameHistory: string = ''
   dynamoPartitionKey: string = ''
   dynamoSortKey: string = ''
   cloudFrontGetUserPresenterDistributionDomain: string = ''
@@ -43,6 +44,10 @@ export class Environments {
       process.env.DYNAMO_TABLE_NAME,
     )
     console.log(
+      'process.env.DYNAMOTABLENAMEHISTORY - [CHEGOU NO LOAD_ENVS] - ',
+      process.env.DYNAMO_TABLE_NAME_HISTORY,
+    )
+    console.log(
       'process.env.ENDPOINT_URL - [CHEGOU NO LOAD_ENVS] - ',
       process.env.ENDPOINT_URL,
     )
@@ -62,6 +67,7 @@ export class Environments {
       this.region = 'sa-east-1'
       this.endpointUrl = 'http://localhost:8000'
       this.dynamoTableName = 'UserMssTemplateTable'
+      this.dynamoTableNameHistory = 'UserMssTemplateTableHistory'
       this.dynamoPartitionKey = 'PK'
       this.dynamoSortKey = 'SK'
       this.cloudFrontGetUserPresenterDistributionDomain =
@@ -71,6 +77,7 @@ export class Environments {
       this.region = process.env.REGION as string
       this.endpointUrl = process.env.ENDPOINT_URL as string
       this.dynamoTableName = process.env.DYNAMO_TABLE_NAME as string
+      this.dynamoTableNameHistory = process.env.DYNAMO_TABLE_NAME_HISTORY as string
       this.dynamoPartitionKey = process.env.DYNAMO_PARTITION_KEY as string
       this.dynamoSortKey = process.env.DYNAMO_SORT_KEY as string
       this.cloudFrontGetUserPresenterDistributionDomain = process.env
