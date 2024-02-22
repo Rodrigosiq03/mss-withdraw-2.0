@@ -1,34 +1,31 @@
 import { Withdraw } from '../../../../../src/shared/domain/entities/withdraw'
-import { STATE } from '../../../../.././src/shared/domain/enums/state_enum'
-import { IWithdrawRepository } from '../../../../.././src/shared/domain/repositories/withdraw_repository_interface'
-import { EntityError } from '../../../../.././src/shared/helpers/errors/domain_errors'
+import { STATE } from '../../../../../src/shared/domain/enums/state_enum'
+import { IWithdrawRepository } from '../../../../../src/shared/domain/repositories/withdraw_repository_interface'
+import { EntityError } from '../../../../../src/shared/helpers/errors/domain_errors'
 
 export class CreateWithdrawUsecase {
   constructor(private repo: IWithdrawRepository) {}
 
   async execute(
-    withdrawId: string,
     notebookSerialNumber: string,
     studentRA: string,
+    name: string,
     initTime: number,
   ) {
-    if (Withdraw.validateWithdrawId(withdrawId) === false) {
-      throw new EntityError('withdrawId')
-    }
-    if (Withdraw.validateNotebookSerialNumber(notebookSerialNumber) === false) {
+    if (!Withdraw.validateNotebookSerialNumber(notebookSerialNumber)) {
       throw new EntityError('notebookSerialNumber')
     }
-    if (Withdraw.validateStudentRA(studentRA) === false) {
+    if (!Withdraw.validateStudentRA(studentRA)) {
       throw new EntityError('studentRA')
     }
-    if (Withdraw.validateTime(initTime) === false) {
+    if (!Withdraw.validateTime(initTime)) {
       throw new EntityError('initTime')
     }
 
     const withdraw = new Withdraw({
-      withdrawId,
       notebookSerialNumber,
       studentRA,
+      name,
       initTime,
       state: STATE.PENDING,
     })
