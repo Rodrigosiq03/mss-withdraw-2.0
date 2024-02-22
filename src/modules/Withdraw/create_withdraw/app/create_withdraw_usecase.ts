@@ -1,5 +1,4 @@
 import { Withdraw } from '../../../../../src/shared/domain/entities/withdraw'
-import { STATE } from '../../../../../src/shared/domain/enums/state_enum'
 import { IWithdrawRepository } from '../../../../../src/shared/domain/repositories/withdraw_repository_interface'
 import { EntityError } from '../../../../../src/shared/helpers/errors/domain_errors'
 
@@ -22,13 +21,13 @@ export class CreateWithdrawUsecase {
       throw new EntityError('initTime')
     }
 
-    const withdraw = new Withdraw({
+    const withdrawUpdated = await this.repo.createWithdraw(
       notebookSerialNumber,
       studentRA,
       name,
       initTime,
-      state: STATE.PENDING,
-    })
-    return this.repo.createWithdraw(withdraw)
+    )
+
+    return withdrawUpdated
   }
 }
