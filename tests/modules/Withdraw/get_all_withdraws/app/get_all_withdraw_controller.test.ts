@@ -6,6 +6,7 @@ import { HttpRequest } from '../../../../../src/shared/helpers/external_interfac
 
 describe('Assert Get All Withdraws controller is correct at all', () => {
   it('Should activate controller correctly', async () => {
+    
     const repo = new WithdrawRepositoryMock()
     const usecase = new GetAllWithdrawsUsecase(repo)
     const controller = new GetAllWithdrawsController(usecase)
