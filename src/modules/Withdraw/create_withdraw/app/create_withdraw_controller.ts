@@ -4,13 +4,14 @@ import {
   WrongTypeParameters,
 } from '../../../../shared/helpers/errors/controller_errors'
 import { EntityError } from '../../../../shared/helpers/errors/domain_errors'
-import { NoItemsFound } from '../../../../shared/helpers/errors/usecase_errors'
+import { ForbiddenAction, NoItemsFound } from '../../../../shared/helpers/errors/usecase_errors'
 import { IRequest } from '../../../../shared/helpers/external_interfaces/external_interface'
 import {
   BadRequest,
   Created,
   InternalServerError,
   NotFound,
+  Unauthorized,
 } from '../../../../shared/helpers/external_interfaces/http_codes'
 import { CreateWithdrawUsecase } from '../../../../../src/modules/Withdraw/create_withdraw/app/create_withdraw_usecase'
 import { CreateViewmodel } from './create_withdraw_viewmodel'
@@ -18,8 +19,14 @@ import { CreateViewmodel } from './create_withdraw_viewmodel'
 export class CreateWithdrawController {
   constructor(private usecase: CreateWithdrawUsecase) {}
 
-  async handle(request: IRequest) {
+  async handle(request: IRequest, decoded: any) {
     try {
+      if (decoded === undefined) {
+        throw new MissingParameters('token')
+      }
+      if (decoded.role === undefined || decoded.role !== 'STUDENT') {
+        throw new ForbiddenAction('type of user')
+      }
       if (request.data.withdrawId === undefined) {
         throw new MissingParameters('withdrawId')
       }
@@ -85,6 +92,9 @@ export class CreateWithdrawController {
       }
       if (error instanceof EntityError) {
         return new BadRequest(error.message)
+      }
+      if (error instanceof ForbiddenAction) {
+        return new Unauthorized(error.message)
       }
       if (error instanceof Error) {
         return new InternalServerError(error.message)
