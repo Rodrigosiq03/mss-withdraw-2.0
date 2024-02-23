@@ -4,34 +4,25 @@ import { WithdrawRepositoryMock } from '../../../../../src/shared/infra/reposito
 import { CreateWithdrawUsecase } from '../../../../../src/modules/Withdraw/create_withdraw/app/create_withdraw_usecase'
 import { HttpRequest } from '../../../../../src/shared/helpers/external_interfaces/http_models'
 import { CreateWithdrawController } from '../../../../../src/modules/Withdraw/create_withdraw/app/create_withdraw_controller'
-import envs from '../../../../..'
 
 describe('Assert Create Withdraw controller is correct at all', () => {
-  const jwtSecret = envs.JWT_SECRET as string
-
   it('Should activate controller correctly', async () => {
     const repo = new WithdrawRepositoryMock()
     const usecase = new CreateWithdrawUsecase(repo)
     const controller = new CreateWithdrawController(usecase)
 
-    const user = { name: 'Test User', studentRA: '23.00335-9' }
-    const token = jwt.sign({ user }, jwtSecret)
+    const request = new HttpRequest(undefined, undefined, { notebookSerialNumber: 'ABC123' })
 
-    const request = new HttpRequest(
-      undefined,
-      { authorization: `Bearer ${token}` },
-      {
-        notebookSerialNumber: 'ABC123',
-      },
-    )
+    const decoded = {
+      role: 'STUDENT',
+      ra: '23.00335-9',
+      name: 'Test User',
+    }
 
-    const response = await controller.handle(request)
+    const response = await controller.handle(request, decoded)
 
     expect(response?.statusCode).toEqual(201)
-    expect(response?.body).toHaveProperty(
-      'message',
-      'The withdraw was created successfully',
-    )
+    expect(response?.body['message']).toEqual('The withdraw was created successfully')
   })
 
   it('Should throw 400 statusCode when not pass notebookSerialNumber', async () => {

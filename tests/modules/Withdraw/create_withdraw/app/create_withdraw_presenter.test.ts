@@ -10,8 +10,7 @@ describe('Assert Create Withdraw presenter is correct at all', async () => {
       rawQueryString: 'parameter1=value1&parameter1=value2&parameter2=value',
       cookies: ['cookie1', 'cookie2'],
       headers: {
-        header1: 'value1',
-        header2: 'value1,value2',
+        authorization: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoie1wicmFcIjpcIjIyLjAwNjgwLTBcIixcIm5hbWVcIjpcIlJvZHJpZ28gRGlhbmEgU2lxdWVpcmFcIixcImVtYWlsXCI6XCIyMi4wMDY4MC0wQG1hdWEuYnJcIixcInJvbGVcIjpcIlNUVURFTlRcIixcInBhc3N3b3JkXCI6XCIkMmEkMDYkVC9jZEhuYnJmWXZmb1dqbC9ESWk3dVpId21Idkx5YmNjbWdDR3VrL2E2WTRnemlhRjBxV2VcIn0iLCJpYXQiOjE3MDg2MzM5OTIsImV4cCI6MTcwODcyMDM5Mn0.GUF0rqeAbVIzsDB_3AXl86vWfqOe8wIY1AirfiRoGmg',
       },
       queryStringParameters: {
         parameter1: 'value1',
@@ -47,10 +46,7 @@ describe('Assert Create Withdraw presenter is correct at all', async () => {
         timeEpoch: 1583348638390,
       },
       body: {
-        withdrawId: '2',
-        notebookSerialNumber: 'ABC124',
-        studentRA: '22.00680-0',
-        initTime: 1704074148050,
+        notebookSerialNumber: 'ABC123',
       },
       pathParameters: null,
       isBase64Encoded: null,

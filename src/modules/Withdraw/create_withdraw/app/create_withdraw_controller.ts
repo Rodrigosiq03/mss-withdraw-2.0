@@ -1,6 +1,4 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-
-import jwt from 'jsonwebtoken'
 import {
   MissingParameters,
   WrongTypeParameters,
@@ -16,46 +14,53 @@ import {
 import { CreateWithdrawUsecase } from '../../../../../src/modules/Withdraw/create_withdraw/app/create_withdraw_usecase'
 import { CreateViewmodel } from './create_withdraw_viewmodel'
 import { Withdraw } from '../../../../../src/shared/domain/entities/withdraw'
-import { NoItemsFound } from '../../../../shared/helpers/errors/usecase_errors'
+import { ForbiddenAction, NoItemsFound } from '../../../../shared/helpers/errors/usecase_errors'
 
 export class CreateWithdrawController {
   constructor(private usecase: CreateWithdrawUsecase) {}
 
-  async handle(request: IRequest) {
+  async handle(request: IRequest, decoded: any) {
     try {
-      const token = request.headers.authorization.split(' ')[1]
-
-      const decoded = jwt.decode(token) as any
-      if (!decoded) {
-        throw new Error('Invalid token')
+      if (decoded === undefined) {
+        throw new MissingParameters('token')
       }
 
-      const user = JSON.parse(decoded.user)
-
-      const { notebookSerialNumber } = request.data as {
-        notebookSerialNumber: string
+      const role = decoded.role
+      
+      if (role === undefined || role !== 'STUDENT') {
+        throw new ForbiddenAction('type of user')
       }
+      
+      const name = decoded.name
+      const studentRA = decoded.ra
 
-      if (!notebookSerialNumber) {
+      if (!request.data.notebookSerialNumber) {
         throw new MissingParameters('notebookSerialNumber')
       }
-      if (!user.name) {
+      if (typeof request.data.notebookSerialNumber !== 'string') {
+        throw new WrongTypeParameters(
+          'notebookSerialNumber',
+          'string',
+          typeof request.data.studentRA,
+        )
+      }
+      if (!name) {
         throw new MissingParameters('name')
       }
-      if (!user.studentRA) {
+      if (!studentRA) {
         throw new MissingParameters('studentRA')
       }
 
-      if (!Withdraw.validateStudentRA(user.studentRA)) {
+      if (!Withdraw.validateStudentRA(studentRA)) {
         throw new EntityError('studentRA')
       }
 
       const initTime = new Date().getTime()
 
       const withdraw = await this.usecase.execute(
-        notebookSerialNumber,
-        user.studentRA,
-        user.name,
+        request.data.notebookSerialNumber,
+        studentRA,
+        name,
         initTime,
       )
 

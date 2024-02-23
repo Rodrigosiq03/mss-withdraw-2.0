@@ -3,26 +3,48 @@ import { Withdraw } from '../../../../../src/shared/domain/entities/withdraw'
 import { STATE } from '../../../../../src/shared/domain/enums/state_enum'
 import { CreateViewmodel } from '../../../../../src/modules/Withdraw/create_withdraw/app/create_withdraw_viewmodel'
 
-describe('Assert Create Withdraw viewmodel is correct at all', () => {
-  it('Should activate viewmodel correctly', async () => {
+describe('CreateViewmodel', () => {
+  it('Should create viewmodel correctly', () => {
     const withdraw = new Withdraw({
-      withdrawId: '1',
       notebookSerialNumber: 'ABC123',
       studentRA: '23.00335-9',
       initTime: 1704074148000,
+      finishTime: 1704074150000,
       state: STATE.PENDING,
     })
 
-    const withdrawViewmodel = new CreateViewmodel(withdraw).toJSON()
+    const viewModel = new CreateViewmodel(withdraw)
 
-    expect(withdrawViewmodel).toEqual({
-      withdrawId: '1',
+    const expectedViewModel = {
       notebookSerialNumber: 'ABC123',
       studentRA: '23.00335-9',
       initTime: 1704074148000,
-      finishTime: undefined,
-      state: 'PENDING',
+      finishTime: 1704074150000,
+      state: STATE.PENDING,
       message: 'The withdraw was created successfully',
+    }
+
+    expect(viewModel.toJSON()).toEqual(expectedViewModel)
+  })
+
+  it('Should create viewmodel with default values', () => {
+    const withdraw = new Withdraw({
+      notebookSerialNumber: 'ABC123',
+      studentRA: '23.00335-9',
+      state: STATE.PENDING,
     })
+
+    const viewModel = new CreateViewmodel(withdraw)
+
+    const expectedViewModel = {
+      notebookSerialNumber: 'ABC123',
+      studentRA: '23.00335-9',
+      initTime: 0,
+      finishTime: 0,
+      state: STATE.PENDING,
+      message: 'The withdraw was created successfully',
+    }
+
+    expect(viewModel.toJSON()).toEqual(expectedViewModel)
   })
 })
