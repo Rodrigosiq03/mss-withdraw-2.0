@@ -57,9 +57,9 @@ describe('Assert Get Withdraw presenter is correct at all', () => {
     expect(response?.statusCode).toEqual(200)
     expect(response?.body).toEqual(
       JSON.stringify({
-        id: '1',
-        notebookSerialNumber: 'ABC123',
-        studentRA: '23.00335-9',
+        notebookSerialNumber: 'GHI789',
+        studentRA: '23.00555-7',
+        name: 'Matue',
         initTime: 1704074148000,
         state: 'PENDING',
         message: 'Withdraw has been retrieved successfully',
