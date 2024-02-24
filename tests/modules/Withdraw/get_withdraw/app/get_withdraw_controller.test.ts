@@ -14,7 +14,7 @@ describe('Assert Get All Withdraws controller is correct at all', () => {
       studentRA: '23.00555-7',
     })
 
-    const response = await controller.handle(request)
+    const response = await controller.handle(request, undefined)
 
     expect(response?.statusCode).toEqual(200)
     expect(response?.body['notebookSerialNumber']).toEqual('GHI789')

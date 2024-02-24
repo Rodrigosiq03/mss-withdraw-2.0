@@ -14,7 +14,7 @@ describe('Assert Get Withdraw presenter is correct at all', () => {
         header2: 'value1,value2',
       },
       queryStringParameters: {
-        studentRA: '23.00335-9',
+        studentRA: '23.00555-7',
       },
       requestContext: {
         accountId: '123456789012',
