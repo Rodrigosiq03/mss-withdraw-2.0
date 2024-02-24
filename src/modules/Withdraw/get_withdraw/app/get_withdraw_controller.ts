@@ -7,6 +7,7 @@ import {
   InternalServerError,
   NotFound,
   OK,
+  Unauthorized,
 } from '../../../../shared/helpers/external_interfaces/http_codes'
 import { IRequest } from '../../../../shared/helpers/external_interfaces/external_interface'
 import { EntityError } from '../../../../shared/helpers/errors/domain_errors'
@@ -14,13 +15,26 @@ import {
   MissingParameters,
   WrongTypeParameters,
 } from '../../../../shared/helpers/errors/controller_errors'
-import { NoItemsFound } from '../../../../../src/shared/helpers/errors/usecase_errors'
+import {
+  NoItemsFound,
+  ForbiddenAction,
+} from '../../../../shared/helpers/errors/usecase_errors'
 
 export class GetWithdrawByRAController {
   constructor(private usecase: GetWithdrawUseCase) {}
 
-  async handle(request: IRequest) {
+  async handle(request: IRequest, decoded: any) {
     try {
+      if (
+        decoded === undefined ||
+        decoded.role !== 'EMPLOYEE' ||
+        decoded.role !== 'ADMIN'
+      ) {
+        throw new ForbiddenAction(
+          'Only employees or admins can perform this action',
+        )
+      }
+
       if (request.data.studentRA === undefined) {
         throw new MissingParameters('studentRA')
       }
@@ -47,6 +61,9 @@ export class GetWithdrawByRAController {
         error instanceof EntityError
       ) {
         return new BadRequest(error.message)
+      }
+      if (error instanceof ForbiddenAction) {
+        return new Unauthorized('This action is forbidden for only admins')
       }
       if (error instanceof Error) {
         return new InternalServerError(error.message)
