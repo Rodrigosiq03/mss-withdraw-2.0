@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
+import { getNameAndRaFromToken } from '../../../../../src/shared/middlewares/jwt_middleware'
 import { Environments } from '../../../../shared/environments'
 import {
   LambdaHttpRequest,
@@ -15,7 +16,8 @@ const controller = new GetWithdrawByRAController(usecase)
 
 export async function getWithdrawByRAPresenter(event: Record<string, any>) {
   const httpRequest = new LambdaHttpRequest(event)
-  const response = await controller.handle(httpRequest)
+  const decoded = getNameAndRaFromToken(httpRequest)
+  const response = await controller.handle(httpRequest, decoded)
   const httpResponse = new LambdaHttpResponse(
     response?.body,
     response?.statusCode,
