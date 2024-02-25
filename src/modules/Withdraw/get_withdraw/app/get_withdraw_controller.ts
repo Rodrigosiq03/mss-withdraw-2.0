@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 import { GetWithdrawUseCase } from './get_withdraw_usecase'
@@ -20,34 +21,30 @@ import {
   ForbiddenAction,
 } from '../../../../shared/helpers/errors/usecase_errors'
 
-export class GetWithdrawByRAController {
+export class GetWithdrawByNotebookSerialNumberController {
   constructor(private usecase: GetWithdrawUseCase) {}
 
-  async handle(request: IRequest, decoded: any) {
+  async handle(request: IRequest, user: any) {
     try {
-      if (
-        decoded === undefined ||
-        decoded.role !== 'EMPLOYEE' ||
-        decoded.role !== 'ADMIN'
-      ) {
+      if (!user || (user.role !== 'EMPLOYEE' && user.role !== 'ADMIN')) {
         throw new ForbiddenAction(
           'Only employees or admins can perform this action',
         )
       }
 
-      if (request.data.studentRA === undefined) {
-        throw new MissingParameters('studentRA')
+      if (request.data.notebookSerialNumber === undefined) {
+        throw new MissingParameters('notebookSerialNumber')
       }
-      if (typeof request.data.studentRA !== 'string') {
+      if (typeof request.data.notebookSerialNumber !== 'string') {
         throw new WrongTypeParameters(
-          'studentRA',
+          'notebookSerialNumber',
           'string',
-          typeof request.data.studentRA,
+          typeof request.data.notebookSerialNumber,
         )
       }
 
-      const studentRA = request.data.studentRA
-      const withdraw = await this.usecase.execute(studentRA)
+      const notebookSerialNumber = request.data.notebookSerialNumber
+      const withdraw = await this.usecase.execute(notebookSerialNumber)
       const viewModel = new WithdrawViewModel(withdraw)
 
       return new OK(viewModel.toJSON())
