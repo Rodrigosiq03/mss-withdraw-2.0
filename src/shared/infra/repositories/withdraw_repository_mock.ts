@@ -59,7 +59,7 @@ export class WithdrawRepositoryMock implements IWithdrawRepository {
   }
 
   async getWithdrawByNotebookSerialNumber(notebookSerialNumber: string): Promise<Withdraw> {
-    const withdraw = this.activeWithdraws.find((w) => w.studentRA === notebookSerialNumber)
+    const withdraw = this.activeWithdraws.find((w) => w.notebookSerialNumber === notebookSerialNumber)
     if (!withdraw) {
       throw new NoItemsFound('notebookSerialNumber')
     }
