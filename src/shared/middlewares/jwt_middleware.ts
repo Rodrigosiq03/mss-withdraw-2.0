@@ -5,7 +5,7 @@ import { EntityError } from '../helpers/errors/domain_errors'
 
 import envs from '../../../'
 
-export function getNameAndRaFromToken(request: IRequest) {
+export function getUserFromToken(request: IRequest) {
   const auth = request.data.authorization as string
   const token = auth.split(' ')[1]
 
