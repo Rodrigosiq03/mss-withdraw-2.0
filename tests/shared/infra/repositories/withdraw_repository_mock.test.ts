@@ -17,7 +17,6 @@ describe('WithdrawRepositoryMock', () => {
     const name = 'Matue'
     const initTime = Date.now()
 
-
     await expect(
       repository.createWithdraw(
         notebookSerialNumber,
@@ -50,16 +49,17 @@ describe('WithdrawRepositoryMock', () => {
     )
   })
 
-  it('should get withdraw by RA', async () => {
-    const withdraw = await repository.getWithdrawByRA('23.00555-7')
+  it('should get withdraw by NotebookSerialNumber', async () => {
+    const withdraw =
+      await repository.getWithdrawByNotebookSerialNumber('ABC123')
 
-    expect(withdraw?.studentRA).toEqual('23.00555-7')
+    expect(withdraw?.notebookSerialNumber).toEqual('ABC123')
   })
 
   it('should throw error when getting withdraw by non-existing RA', async () => {
-    await expect(repository.getWithdrawByRA('non-existing-ra')).rejects.toThrow(
-      NoItemsFound,
-    )
+    await expect(
+      repository.getWithdrawByNotebookSerialNumber('non-existing-ra'),
+    ).rejects.toThrow(NoItemsFound)
   })
 
   it('should get all withdraws', async () => {
