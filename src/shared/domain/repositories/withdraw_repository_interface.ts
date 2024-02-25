@@ -7,7 +7,7 @@ export interface IWithdrawRepository {
     name: string,
     initTime: number,
   ): Promise<Withdraw>
-  getWithdrawByRA(ra: string): Promise<Withdraw>
+  getWithdrawByNotebookSerialNumber(notebookSerialNumber: string): Promise<Withdraw>
   getAllWithdraws(): Promise<Withdraw[]>
   updateWithdrawByRA(ra: string, isChecked: boolean): Promise<Withdraw>
 }
