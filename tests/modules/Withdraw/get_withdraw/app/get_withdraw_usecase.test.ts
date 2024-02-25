@@ -8,7 +8,7 @@ describe('Assert Get Withdraw usecase is correct at all', () => {
     const repo = new WithdrawRepositoryMock()
     const usecase = new GetWithdrawUseCase(repo)
 
-    const withdraw = await usecase.execute('23.00555-7')
+    const withdraw = await usecase.execute('GHI789')
 
     expect(withdraw.props).toEqual({
       notebookSerialNumber: 'GHI789',
