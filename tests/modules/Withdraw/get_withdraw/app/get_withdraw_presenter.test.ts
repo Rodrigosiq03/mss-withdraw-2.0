@@ -1,7 +1,18 @@
 import { expect, it, describe } from 'vitest'
 import { handler } from '../../.././../../src/modules/Withdraw/get_withdraw/app/get_withdraw_presenter'
+import envs from '../../../../..'
+import jwt from 'jsonwebtoken'
 
 describe('Assert Get Withdraw presenter is correct at all', () => {
+  const user = {
+    role: 'EMPLOYEE',
+  }
+  const secret = envs.JWT_SECRET
+
+  if (secret === undefined) throw Error('JWT_SECRET is not defined')
+
+  const token = jwt.sign({ user: JSON.stringify(user) }, secret)
+
   it('Assert Get Withdraw presenter is correct when creating', async () => {
     const event = {
       version: '2.0',
@@ -12,6 +23,7 @@ describe('Assert Get Withdraw presenter is correct at all', () => {
       headers: {
         header1: 'value1',
         header2: 'value1,value2',
+        authorization: `Bearer ${token}`,
       },
       queryStringParameters: {
         studentRA: '23.00555-7',
