@@ -8,7 +8,7 @@ import {
   WrongTypeParameters,
 } from '../../../../shared/helpers/errors/controller_errors'
 import { EntityError } from '../../../../shared/helpers/errors/domain_errors'
-import { NoItemsFound } from '../../../../shared/helpers/errors/usecase_errors'
+import { ForbiddenAction, NoItemsFound } from '../../../../shared/helpers/errors/usecase_errors'
 import { IRequest } from '../../../../shared/helpers/external_interfaces/external_interface'
 import {
   BadRequest,
@@ -23,9 +23,9 @@ export class UpdateWithdrawController {
 
   async handle(request: IRequest, user: any) {
     try {
-      if (!user || (user.role !== 'EMPLOYEE' && user.role !== 'ADMIN')) {
-        throw new Unauthorized(
-          'Only employees or admins can perform this action',
+      if (!user || (user.role !== 'EMPLOYEE' || user.role !== 'ADMIN')) {
+        throw new ForbiddenAction(
+          'type of user',
         )
       }
 
@@ -69,8 +69,8 @@ export class UpdateWithdrawController {
       ) {
         return new BadRequest(error.message)
       }
-      if (error instanceof Unauthorized) {
-        return new Unauthorized('This action is forbidden for only admins')
+      if (error instanceof ForbiddenAction) {
+        return new Unauthorized(error.message)
       }
       return new InternalServerError(error.message)
     }

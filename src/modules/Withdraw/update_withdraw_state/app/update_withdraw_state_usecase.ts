@@ -1,15 +1,16 @@
-import { IWithdrawRepository } from '@/shared/domain/repositories/withdraw_repository_interface'
+import { IWithdrawRepository } from '../../../../shared/domain/repositories/withdraw_repository_interface'
 import { EntityError } from '../../../../shared/helpers/errors/domain_errors'
+import { Withdraw } from '../../../../shared/domain/entities/withdraw'
 
 export class UpdateWithdraw {
   constructor(private repo: IWithdrawRepository) {}
 
   async execute(ra: string, isChecked: boolean) {
-    if (typeof ra !== 'string' || ra === '') {
+    if (!Withdraw.validateStudentRA(ra)) {
       throw new EntityError('ra')
     }
 
-    if (typeof isChecked !== 'boolean') {
+    if (typeof isChecked !== 'boolean' || isChecked === undefined) {
       throw new EntityError('isChecked')
     }
 
