@@ -8,7 +8,10 @@ import {
   WrongTypeParameters,
 } from '../../../../shared/helpers/errors/controller_errors'
 import { EntityError } from '../../../../shared/helpers/errors/domain_errors'
-import { ForbiddenAction, NoItemsFound } from '../../../../shared/helpers/errors/usecase_errors'
+import {
+  ForbiddenAction,
+  NoItemsFound,
+} from '../../../../shared/helpers/errors/usecase_errors'
 import { IRequest } from '../../../../shared/helpers/external_interfaces/external_interface'
 import {
   BadRequest,
@@ -23,10 +26,8 @@ export class UpdateWithdrawController {
 
   async handle(request: IRequest, user: any) {
     try {
-      if (!user || (user.role !== 'EMPLOYEE' || user.role !== 'ADMIN')) {
-        throw new ForbiddenAction(
-          'type of user',
-        )
+      if (!user || user.role !== 'EMPLOYEE' || user.role !== 'ADMIN') {
+        throw new ForbiddenAction('type of user')
       }
 
       if (request.data.notebookSerialNumber === undefined) {
@@ -51,12 +52,12 @@ export class UpdateWithdrawController {
       }
 
       const notebookSerialNumber = request.data.notebookSerialNumber
-      const updatedWithdraw = await this.usecase.execute(
+      await this.usecase.execute(
         notebookSerialNumber,
         request.data.state as boolean,
       )
 
-      const viewModel = new UpdateWithdrawViewModel(updatedWithdraw)
+      const viewModel = new UpdateWithdrawViewModel()
       return new OK(viewModel.toJSON())
     } catch (error: any) {
       if (error instanceof NoItemsFound) {
