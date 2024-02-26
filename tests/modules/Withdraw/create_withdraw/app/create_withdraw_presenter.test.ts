@@ -1,7 +1,20 @@
 import { describe, it, expect } from 'vitest'
 import { handler } from '../../../../../src/modules/Withdraw/create_withdraw/app/create_withdraw_presenter'
+import jwt from 'jsonwebtoken'
+import envs from '../../../../..'
 
 describe('Assert Create Withdraw presenter is correct at all', async () => {
+  const user = {
+    role: 'STUDENT',
+    name: 'Luca Pinheiro Gomes',
+    ra: '23.00555-7',
+  }
+  const secret = envs.JWT_SECRET
+
+  if (secret === undefined) throw Error('JWT_SECRET is not defined')
+
+  const token = jwt.sign({ user: JSON.stringify(user)}, secret)
+
   it('Should activate presenter correctly', async () => {
     const event = {
       version: '2.0',
@@ -10,7 +23,7 @@ describe('Assert Create Withdraw presenter is correct at all', async () => {
       rawQueryString: 'parameter1=value1&parameter1=value2&parameter2=value',
       cookies: ['cookie1', 'cookie2'],
       headers: {
-        authorization: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoie1wicmFcIjpcIjIyLjAwNjgwLTBcIixcIm5hbWVcIjpcIlJvZHJpZ28gRGlhbmEgU2lxdWVpcmFcIixcImVtYWlsXCI6XCIyMi4wMDY4MC0wQG1hdWEuYnJcIixcInJvbGVcIjpcIlNUVURFTlRcIixcInBhc3N3b3JkXCI6XCIkMmEkMDYkVC9jZEhuYnJmWXZmb1dqbC9ESWk3dVpId21Idkx5YmNjbWdDR3VrL2E2WTRnemlhRjBxV2VcIn0iLCJpYXQiOjE3MDg2MzM5OTIsImV4cCI6MTcwODcyMDM5Mn0.GUF0rqeAbVIzsDB_3AXl86vWfqOe8wIY1AirfiRoGmg',
+        authorization: `Bearer ${token}`,
       },
       queryStringParameters: {
         parameter1: 'value1',
