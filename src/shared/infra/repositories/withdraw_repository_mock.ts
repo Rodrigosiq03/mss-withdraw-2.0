@@ -15,6 +15,17 @@ export class WithdrawRepositoryMock implements IWithdrawRepository {
     }),
   ]
 
+  private pendingWithdraws: Withdraw[] = [
+    new Withdraw({
+      notebookSerialNumber: 'MNO345',
+      state: STATE.PENDING,
+    }),
+    new Withdraw({
+      notebookSerialNumber: 'MNO678',
+      state: STATE.PENDING,
+    }),
+  ]
+
   private activeWithdraws: Withdraw[] = [
     new Withdraw({
       notebookSerialNumber: 'GHI789',
@@ -79,10 +90,14 @@ export class WithdrawRepositoryMock implements IWithdrawRepository {
     return [...this.inactiveWithdraws, ...this.activeWithdraws]
   }
 
-  async updateWithdrawByRA(ra: string, isChecked: boolean): Promise<Withdraw> {
-    const index = this.activeWithdraws.findIndex((w) => w.studentRA === ra)
+  async updateWithdrawByNotebookSerialNumber(notebookSerialNumber: string, isChecked: boolean): Promise<Withdraw> {
+    const index = this.pendingWithdraws.findIndex((w) => w.notebookSerialNumber === notebookSerialNumber)
     if (index === -1) {
-      throw new NoItemsFound('props.studentRA')
+      throw new NoItemsFound('props.notebookSerialNumber')
+    }
+
+    if (this.pendingWithdraws[index].state !== STATE.PENDING) {
+      throw new NoItemsFound('props.notebookSerialNumber')
     }
 
     if (isChecked) {
