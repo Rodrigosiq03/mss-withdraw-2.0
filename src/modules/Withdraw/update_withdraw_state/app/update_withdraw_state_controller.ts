@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-import { UpdateWithdraw } from './update_withdraw_state_usecase'
+import { UpdateWithdrawUsecase } from './update_withdraw_state_usecase'
 import { UpdateWithdrawViewModel } from './update_withdraw_state_viewmodel'
 import {
   MissingParameters,
@@ -22,11 +22,11 @@ import {
 } from '../../../../shared/helpers/external_interfaces/http_codes'
 
 export class UpdateWithdrawController {
-  constructor(private usecase: UpdateWithdraw) {}
+  constructor(private usecase: UpdateWithdrawUsecase) {}
 
   async handle(request: IRequest, user: any) {
     try {
-      if (!user || user.role !== 'EMPLOYEE' || user.role !== 'ADMIN') {
+      if (!user || (user.role !== 'EMPLOYEE' && user.role !== 'ADMIN')) {
         throw new ForbiddenAction('type of user')
       }
 
@@ -52,10 +52,8 @@ export class UpdateWithdrawController {
       }
 
       const notebookSerialNumber = request.data.notebookSerialNumber
-      await this.usecase.execute(
-        notebookSerialNumber,
-        request.data.state as boolean,
-      )
+      const state = request.data.state
+      await this.usecase.execute(notebookSerialNumber, state)
 
       const viewModel = new UpdateWithdrawViewModel()
       return new OK(viewModel.toJSON())
