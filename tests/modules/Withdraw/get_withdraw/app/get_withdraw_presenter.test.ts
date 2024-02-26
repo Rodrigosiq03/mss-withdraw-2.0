@@ -26,7 +26,7 @@ describe('Assert Get Withdraw presenter is correct at all', () => {
         authorization: `Bearer ${token}`,
       },
       queryStringParameters: {
-        studentRA: '23.00555-7',
+        notebookSerialNumber: 'GHI789',
       },
       requestContext: {
         accountId: '123456789012',
