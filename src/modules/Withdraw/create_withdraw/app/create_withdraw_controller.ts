@@ -10,6 +10,7 @@ import {
   Created,
   InternalServerError,
   NotFound,
+  Unauthorized,
 } from '../../../../shared/helpers/external_interfaces/http_codes'
 import { CreateWithdrawUsecase } from '../../../../../src/modules/Withdraw/create_withdraw/app/create_withdraw_usecase'
 import { CreateViewmodel } from './create_withdraw_viewmodel'
@@ -19,20 +20,20 @@ import { ForbiddenAction, NoItemsFound } from '../../../../shared/helpers/errors
 export class CreateWithdrawController {
   constructor(private usecase: CreateWithdrawUsecase) {}
 
-  async handle(request: IRequest, decoded: any) {
+  async handle(request: IRequest, user: any) {
     try {
-      if (decoded === undefined) {
+      if (user === undefined) {
         throw new MissingParameters('token')
       }
 
-      const role = decoded.role
+      const role = user.role
       
       if (role === undefined || role !== 'STUDENT') {
         throw new ForbiddenAction('type of user')
       }
       
-      const name = decoded.name
-      const studentRA = decoded.ra
+      const name = user.name
+      const studentRA = user.ra
 
       if (!request.data.notebookSerialNumber) {
         throw new MissingParameters('notebookSerialNumber')
@@ -79,6 +80,9 @@ export class CreateWithdrawController {
         error instanceof EntityError
       ) {
         return new BadRequest(error.message)
+      }
+      if (error instanceof ForbiddenAction) {
+        return new Unauthorized(error.message)
       }
       return new InternalServerError(error.message)
     }

@@ -26,9 +26,9 @@ export class GetWithdrawByNotebookSerialNumberController {
 
   async handle(request: IRequest, user: any) {
     try {
-      if (!user || (user.role !== 'EMPLOYEE' && user.role !== 'ADMIN')) {
+      if (!user || (user.role !== 'EMPLOYEE' || user.role !== 'ADMIN')) {
         throw new ForbiddenAction(
-          'Only employees or admins can perform this action',
+          'type of user',
         )
       }
 
@@ -60,7 +60,7 @@ export class GetWithdrawByNotebookSerialNumberController {
         return new BadRequest(error.message)
       }
       if (error instanceof ForbiddenAction) {
-        return new Unauthorized('This action is forbidden for only admins')
+        return new Unauthorized(error.message)
       }
       if (error instanceof Error) {
         return new InternalServerError(error.message)
