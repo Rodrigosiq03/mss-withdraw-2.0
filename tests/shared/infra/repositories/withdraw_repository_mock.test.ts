@@ -75,9 +75,9 @@ describe('WithdrawRepositoryMock', () => {
   })
 
   it('should update withdraw state to approved', async () => {
-    const raToUpdate = '23.00555-7'
-    const updatedWithdraw = await repository.updateWithdrawByRA(
-      raToUpdate,
+    const notebookSerialNumberToUpdate = 'MNO345'
+    const updatedWithdraw = await repository.updateWithdrawByNotebookSerialNumber(
+      notebookSerialNumberToUpdate,
       true,
     )
 
@@ -85,9 +85,9 @@ describe('WithdrawRepositoryMock', () => {
   })
 
   it('should update withdraw state to inactive', async () => {
-    const raToUpdate = '23.00555-7'
-    const updatedWithdraw = await repository.updateWithdrawByRA(
-      raToUpdate,
+    const notebookSerialNumberToUpdate = 'MNO345'
+    const updatedWithdraw = await repository.updateWithdrawByNotebookSerialNumber(
+      notebookSerialNumberToUpdate,
       false,
     )
 
@@ -96,7 +96,7 @@ describe('WithdrawRepositoryMock', () => {
 
   it('should throw error when updating withdraw with non-existing RA', async () => {
     await expect(
-      repository.updateWithdrawByRA('non-existing-ra', true),
+      repository.updateWithdrawByNotebookSerialNumber('non-existing-ra', true),
     ).rejects.toThrow(NoItemsFound)
   })
 })
