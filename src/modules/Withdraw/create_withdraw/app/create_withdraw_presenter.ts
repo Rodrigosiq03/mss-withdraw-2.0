@@ -1,20 +1,19 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-
 import { getUserFromToken } from '../../../../../src/shared/middlewares/jwt_middleware'
 import { Environments } from '../../../../shared/environments'
 import {
   LambdaHttpRequest,
   LambdaHttpResponse,
 } from '../../../../shared/helpers/external_interfaces/http_lambda_requests'
-import { GetWithdrawByNotebookSerialNumberController } from './get_withdraw_controller'
-import { GetWithdrawUseCase } from './get_withdraw_usecase'
+import { CreateWithdrawController } from './create_withdraw_controller'
+import { CreateWithdrawUsecase } from './create_withdraw_usecase'
 
 const repo = Environments.getWithdrawRepo()
-const usecase = new GetWithdrawUseCase(repo)
-const controller = new GetWithdrawByNotebookSerialNumberController(usecase)
+const usecase = new CreateWithdrawUsecase(repo)
+const controller = new CreateWithdrawController(usecase)
 
-export async function GetWithdrawByNotebookSerialNumberPresenter(event: Record<string, any>) {
+export async function createWithdrawPresenter(event: Record<string, any>) {
   const httpRequest = new LambdaHttpRequest(event)
   const decoded = getUserFromToken(httpRequest)
   const response = await controller.handle(httpRequest, decoded)
@@ -28,6 +27,6 @@ export async function GetWithdrawByNotebookSerialNumberPresenter(event: Record<s
 }
 
 export async function handler(event: any, context: any) {
-  const response = await GetWithdrawByNotebookSerialNumberPresenter(event)
+  const response = await createWithdrawPresenter(event)
   return response
 }

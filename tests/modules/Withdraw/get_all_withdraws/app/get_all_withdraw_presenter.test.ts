@@ -1,4 +1,4 @@
-import { describe, it, expect } from 'vitest' 
+import { describe, it, expect } from 'vitest'
 import { getAllWithdrawsPresenter } from '../../../../../src/modules/Withdraw/get_all_withdraw/app/get_all_withdraw_presenter'
 import { STATE } from '../../../../../src/shared/domain/enums/state_enum'
 
@@ -57,16 +57,24 @@ describe('Assert Get All Withdraws presenter is correct at all', () => {
       message: 'All withdraws have been retrieved successfully',
       withdraws: [
         {
-          id: '1',
           notebookSerialNumber: 'ABC123',
-          studentRA: '23.00335-9',
+          state: STATE.INACTIVE,
+        },
+        {
+          notebookSerialNumber: 'DEF456',
+          state: STATE.INACTIVE,
+        },
+        {
           initTime: 1704074148000,
+          name: 'Matue',
+          notebookSerialNumber: 'GHI789',
+          studentRA: '23.00555-7',
           state: STATE.PENDING,
         },
         {
-          id: '2',
-          notebookSerialNumber: 'DEF456',
-          studentRA: '23.00444-8',
+          name: 'Thiago Veigh',
+          notebookSerialNumber: 'JKL012',
+          studentRA: '23.00656-6',
           initTime: 1704074148000,
           state: STATE.PENDING,
         },

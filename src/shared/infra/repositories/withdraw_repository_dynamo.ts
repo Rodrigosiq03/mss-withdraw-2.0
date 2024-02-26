@@ -2,16 +2,17 @@ import { Withdraw } from '@/shared/domain/entities/withdraw'
 import { IWithdrawRepository } from '@/shared/domain/repositories/withdraw_repository_interface'
 
 export class WithdrawRepositoryDynamo implements IWithdrawRepository {
-  createWithdraw(withdraw: Withdraw): Promise<Withdraw> {
+  createWithdraw(notebookSerialNumber: string, studentRA: string, name: string, initTime: number): Promise<Withdraw> {
     throw new Error('Method not implemented.')
   }
-  getWithdrawByRA(ra: string): Promise<Withdraw> {
+  getWithdrawByNotebookSerialNumber(notebookSerialNumber: string): Promise<Withdraw> {
     throw new Error('Method not implemented.')
   }
   getAllWithdraws(): Promise<Withdraw[]> {
     throw new Error('Method not implemented.')
   }
-  deleteWithdrawByRA(ra: string): Promise<boolean> {
+  updateWithdrawByNotebookSerialNumber(notebookSerialNumber: string, isChecked: boolean): Promise<Withdraw> {
     throw new Error('Method not implemented.')
   }
+  
 }

@@ -1,8 +1,18 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-import { GetWithdrawUseCase } from './get_withdraw_usecase'
-import { WithdrawViewModel } from './get_withdraw_viewmodel'
+import { UpdateWithdrawUsecase } from './update_withdraw_state_usecase'
+import { UpdateWithdrawViewModel } from './update_withdraw_state_viewmodel'
+import {
+  MissingParameters,
+  WrongTypeParameters,
+} from '../../../../shared/helpers/errors/controller_errors'
+import { EntityError } from '../../../../shared/helpers/errors/domain_errors'
+import {
+  ForbiddenAction,
+  NoItemsFound,
+} from '../../../../shared/helpers/errors/usecase_errors'
+import { IRequest } from '../../../../shared/helpers/external_interfaces/external_interface'
 import {
   BadRequest,
   InternalServerError,
@@ -10,19 +20,9 @@ import {
   OK,
   Unauthorized,
 } from '../../../../shared/helpers/external_interfaces/http_codes'
-import { IRequest } from '../../../../shared/helpers/external_interfaces/external_interface'
-import { EntityError } from '../../../../shared/helpers/errors/domain_errors'
-import {
-  MissingParameters,
-  WrongTypeParameters,
-} from '../../../../shared/helpers/errors/controller_errors'
-import {
-  NoItemsFound,
-  ForbiddenAction,
-} from '../../../../shared/helpers/errors/usecase_errors'
 
-export class GetWithdrawByNotebookSerialNumberController {
-  constructor(private usecase: GetWithdrawUseCase) {}
+export class UpdateWithdrawController {
+  constructor(private usecase: UpdateWithdrawUsecase) {}
 
   async handle(request: IRequest, user: any) {
     try {
@@ -40,11 +40,22 @@ export class GetWithdrawByNotebookSerialNumberController {
           typeof request.data.notebookSerialNumber,
         )
       }
+      if (request.data.state === undefined) {
+        throw new MissingParameters('state')
+      }
+      if (typeof request.data.state !== 'boolean') {
+        throw new WrongTypeParameters(
+          'state',
+          'boolean',
+          typeof request.data.state,
+        )
+      }
 
       const notebookSerialNumber = request.data.notebookSerialNumber
-      const withdraw = await this.usecase.execute(notebookSerialNumber)
-      const viewModel = new WithdrawViewModel(withdraw)
+      const state = request.data.state
+      await this.usecase.execute(notebookSerialNumber, state)
 
+      const viewModel = new UpdateWithdrawViewModel()
       return new OK(viewModel.toJSON())
     } catch (error: any) {
       if (error instanceof NoItemsFound) {
@@ -60,9 +71,7 @@ export class GetWithdrawByNotebookSerialNumberController {
       if (error instanceof ForbiddenAction) {
         return new Unauthorized(error.message)
       }
-      if (error instanceof Error) {
-        return new InternalServerError(error.message)
-      }
+      return new InternalServerError(error.message)
     }
   }
 }

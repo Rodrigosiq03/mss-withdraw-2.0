@@ -2,37 +2,33 @@ import { EntityError } from '../../helpers/errors/domain_errors'
 import { STATE } from '../enums/state_enum'
 
 export interface WithdrawProps {
-  withdrawId: string
   notebookSerialNumber: string
-  studentRA: string
-  initTime: number
+  studentRA?: string
+  name?: string
+  initTime?: number
   finishTime?: number
-  state?: STATE
+  state: STATE
 }
 
 export class Withdraw {
   constructor(public props: WithdrawProps) {
-    if (!Withdraw.validateWithdrawId(props.withdrawId)) {
-      throw new EntityError('props.withdrawId')
-    }
+    this.validateProps(props)
+  }
 
+  private validateProps(props: WithdrawProps) {
     if (!Withdraw.validateNotebookSerialNumber(props.notebookSerialNumber)) {
-      throw new EntityError('props.notebookSerialNumber')
+      throw new EntityError('notebookSerialNumber')
     }
 
-    if (!Withdraw.validateStudentRA(props.studentRA)) {
-      throw new EntityError('props.studentRA')
-    }
-
-    if (!Withdraw.validateTime(props.initTime)) {
-      throw new EntityError('props.initTime')
+    if (props.initTime !== undefined && !Withdraw.validateTime(props.initTime)) {
+      throw new EntityError('initTime')
     }
 
     if (
       props.finishTime !== undefined &&
       !Withdraw.validateTime(props.finishTime)
     ) {
-      throw new EntityError('props.finishTime')
+      throw new EntityError('finishTime')
     }
 
     if (
@@ -41,27 +37,16 @@ export class Withdraw {
       props.finishTime < props.initTime
     ) {
       throw new EntityError(
-        'props.initTime and props.finishTime must be in the correct order',
+        'initTime and finishTime must be in the correct order',
       )
     }
-  }
-
-  get withdrawId() {
-    return this.props.withdrawId
-  }
-
-  set setWithdrawId(withdrawId: string) {
-    if (!Withdraw.validateWithdrawId(withdrawId)) {
-      throw new EntityError('withdrawId')
-    }
-    this.props.withdrawId = withdrawId
   }
 
   get notebookSerialNumber() {
     return this.props.notebookSerialNumber
   }
 
-  set setNotebookSerialNumber(notebookSerialNumber: string) {
+  setnotebookSerialNumber(notebookSerialNumber: string) {
     if (!Withdraw.validateNotebookSerialNumber(notebookSerialNumber)) {
       throw new EntityError('notebookSerialNumber')
     }
@@ -72,20 +57,28 @@ export class Withdraw {
     return this.props.studentRA
   }
 
-  set setStudentRA(studentRA: string) {
+  setStudentRA(studentRA: string) {
     if (!Withdraw.validateStudentRA(studentRA)) {
       throw new EntityError('studentRA')
     }
     this.props.studentRA = studentRA
   }
 
+  get name() {
+    return this.props.name
+  }
+
+  setName(name: string) {
+    this.props.name = name
+  }
+
   get initTime() {
     return this.props.initTime
   }
 
-  set setInitTime(initTime: number) {
+  setInitTime(initTime: number) {
     if (!Withdraw.validateTime(initTime)) {
-      throw new EntityError('withdrawalTime')
+      throw new EntityError('initTime')
     }
     this.props.initTime = initTime
   }
@@ -94,7 +87,7 @@ export class Withdraw {
     return this.props.finishTime
   }
 
-  set setFinishTime(finishTime: number) {
+  setFinishTime(finishTime: number) {
     if (finishTime !== undefined && !Withdraw.validateTime(finishTime)) {
       throw new EntityError('finishTime')
     }
@@ -105,20 +98,11 @@ export class Withdraw {
     return this.props.state ?? STATE.PENDING
   }
 
-  set state(state: STATE) {
+  setState(state: STATE) {
     if (!Withdraw.validateState(state)) {
       throw new EntityError('state')
     }
     this.props.state = state
-  }
-
-  static validateWithdrawId(withdrawId: string): boolean {
-    return (
-      withdrawId !== undefined &&
-      withdrawId !== null &&
-      typeof withdrawId === 'string' &&
-      withdrawId.trim().length > 0
-    )
   }
 
   static validateNotebookSerialNumber(notebookSerialNumber: string): boolean {
@@ -134,11 +118,10 @@ export class Withdraw {
 
   static validateStudentRA(studentRA: string): boolean {
     const raPattern = /^\d{2}\.\d{5}-[0-9]$/
-
     return raPattern.test(studentRA)
   }
 
-  static validateTime(time: number): boolean {
+  static validateTime(time: number | undefined): boolean {
     if (
       time === null ||
       time === undefined ||

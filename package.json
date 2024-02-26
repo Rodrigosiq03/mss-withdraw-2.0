@@ -19,10 +19,13 @@
     "@aws-sdk/util-dynamodb": "^3.461.0",
     "aws-sdk": "^2.1506.0",
     "aws-sdk-js-codemod": "^0.28.2",
-    "dotenv": "^16.3.1",
+    "dotenv": "^16.4.5",
+    "jsonwebtoken": "^9.0.2",
+    "pretty-format": "^29.7.0",
     "zod": "^3.22.4"
   },
   "devDependencies": {
+    "@types/jsonwebtoken": "^9.0.5",
     "@typescript-eslint/eslint-plugin": "^6.2.0",
     "@typescript-eslint/parser": "^6.2.0",
     "eslint": "^8.45.0",

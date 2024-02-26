@@ -4,46 +4,108 @@ import { IWithdrawRepository } from '../../domain/repositories/withdraw_reposito
 import { NoItemsFound } from '../../helpers/errors/usecase_errors'
 
 export class WithdrawRepositoryMock implements IWithdrawRepository {
-  private withdraws: Withdraw[] = [
+  private inactiveWithdraws: Withdraw[] = [
     new Withdraw({
-      withdrawId: '1',
       notebookSerialNumber: 'ABC123',
-      studentRA: '23.00335-9',
+      state: STATE.INACTIVE,
+    }),
+    new Withdraw({
+      notebookSerialNumber: 'DEF456',
+      state: STATE.INACTIVE,
+    }),
+  ]
+
+  private pendingWithdraws: Withdraw[] = [
+    new Withdraw({
+      notebookSerialNumber: 'MNO345',
+      state: STATE.PENDING,
+    }),
+    new Withdraw({
+      notebookSerialNumber: 'MNO678',
+      state: STATE.PENDING,
+    }),
+  ]
+
+  private activeWithdraws: Withdraw[] = [
+    new Withdraw({
+      notebookSerialNumber: 'GHI789',
+      studentRA: '23.00555-7',
+      name: 'Matue',
       initTime: 1704074148000,
       state: STATE.PENDING,
     }),
     new Withdraw({
-      withdrawId: '2',
-      notebookSerialNumber: 'DEF456',
-      studentRA: '23.00444-8',
+      notebookSerialNumber: 'JKL012',
+      studentRA: '23.00656-6',
+      name: 'Thiago Veigh',
       initTime: 1704074148000,
       state: STATE.PENDING,
     }),
   ]
 
-  async createWithdraw(withdraw: Withdraw): Promise<Withdraw> {
-    this.withdraws.push(withdraw)
-    return withdraw
+  async createWithdraw(
+    notebookSerialNumber: string,
+    studentRA: string,
+    name: string,
+    initTime: number,
+  ): Promise<Withdraw> {
+    const existingWithdraw = this.inactiveWithdraws.find(
+      (w) => w.notebookSerialNumber === notebookSerialNumber,
+    )
+
+    if (existingWithdraw) {
+      existingWithdraw.setState(STATE.PENDING)
+      return existingWithdraw
+    } else {
+      const withdraw = new Withdraw({
+        notebookSerialNumber,
+        studentRA,
+        name,
+        initTime,
+        state: STATE.PENDING,
+      })
+      this.activeWithdraws.push(withdraw)
+      return withdraw
+    }
   }
 
-  async getWithdrawByRA(ra: string): Promise<Withdraw> {
-    const withdraw = this.withdraws.find((w) => w.studentRA === ra)
+  async getWithdrawByNotebookSerialNumber(
+    notebookSerialNumber: string,
+  ): Promise<Withdraw> {
+    let withdraw = this.activeWithdraws.find(
+      (w) => w.notebookSerialNumber === notebookSerialNumber,
+    )
     if (!withdraw) {
-      throw new NoItemsFound('studentRA')
+      withdraw = this.inactiveWithdraws.find(
+        (w) => w.notebookSerialNumber === notebookSerialNumber,
+      )
+    }
+    if (!withdraw) {
+      throw new NoItemsFound('notebookSerialNumber')
     }
     return withdraw
   }
 
   async getAllWithdraws(): Promise<Withdraw[]> {
-    return this.withdraws
+    return [...this.inactiveWithdraws, ...this.activeWithdraws]
   }
 
-  async deleteWithdrawByRA(ra: string): Promise<boolean> {
-    const index = this.withdraws.findIndex((w) => w.studentRA === ra)
+  async updateWithdrawByNotebookSerialNumber(notebookSerialNumber: string, isChecked: boolean): Promise<Withdraw> {
+    const index = this.pendingWithdraws.findIndex((w) => w.notebookSerialNumber === notebookSerialNumber)
     if (index === -1) {
-      throw new NoItemsFound('props.studentRA')
+      throw new NoItemsFound('props.notebookSerialNumber')
     }
-    this.withdraws.splice(index, 1)
-    return true
+
+    if (this.pendingWithdraws[index].state !== STATE.PENDING) {
+      throw new NoItemsFound('props.notebookSerialNumber')
+    }
+
+    if (isChecked) {
+      this.activeWithdraws[index].setState(STATE.APPROVED)
+    } else {
+      this.activeWithdraws[index].setState(STATE.INACTIVE)
+    }
+
+    return this.activeWithdraws[index]
   }
 }

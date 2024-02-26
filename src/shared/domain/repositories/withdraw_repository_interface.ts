@@ -1,8 +1,13 @@
 import { Withdraw } from '../entities/withdraw'
 
 export interface IWithdrawRepository {
-  createWithdraw(withdraw: Withdraw): Promise<Withdraw>
-  getWithdrawByRA(ra: string): Promise<Withdraw>
+  createWithdraw(
+    notebookSerialNumber: string,
+    studentRA: string,
+    name: string,
+    initTime: number,
+  ): Promise<Withdraw>
+  getWithdrawByNotebookSerialNumber(notebookSerialNumber: string): Promise<Withdraw>
   getAllWithdraws(): Promise<Withdraw[]>
-  deleteWithdrawByRA(ra: string): Promise<boolean>
+  updateWithdrawByNotebookSerialNumber(notebookSerialNumber: string, isChecked: boolean): Promise<Withdraw>
 }

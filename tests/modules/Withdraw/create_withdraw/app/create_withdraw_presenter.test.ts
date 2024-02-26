@@ -1,19 +1,21 @@
-import { expect, it, describe } from 'vitest'
-import { handler } from '../../.././../../src/modules/Withdraw/get_withdraw/app/get_withdraw_presenter'
-import envs from '../../../../..'
+import { describe, it, expect } from 'vitest'
+import { handler } from '../../../../../src/modules/Withdraw/create_withdraw/app/create_withdraw_presenter'
 import jwt from 'jsonwebtoken'
+import envs from '../../../../..'
 
-describe('Assert Get Withdraw presenter is correct at all', () => {
+describe('Assert Create Withdraw presenter is correct at all', async () => {
   const user = {
-    role: 'EMPLOYEE',
+    role: 'STUDENT',
+    name: 'Luca Pinheiro Gomes',
+    ra: '23.00555-7',
   }
   const secret = envs.JWT_SECRET
 
   if (secret === undefined) throw Error('JWT_SECRET is not defined')
 
-  const token = jwt.sign({ user: JSON.stringify(user) }, secret)
+  const token = jwt.sign({ user: JSON.stringify(user)}, secret)
 
-  it('Assert Get Withdraw presenter is correct when creating', async () => {
+  it('Should activate presenter correctly', async () => {
     const event = {
       version: '2.0',
       routeKey: '$default',
@@ -21,12 +23,10 @@ describe('Assert Get Withdraw presenter is correct at all', () => {
       rawQueryString: 'parameter1=value1&parameter1=value2&parameter2=value',
       cookies: ['cookie1', 'cookie2'],
       headers: {
-        header1: 'value1',
-        header2: 'value1,value2',
         authorization: `Bearer ${token}`,
       },
       queryStringParameters: {
-        notebookSerialNumber: 'GHI789',
+        parameter1: 'value1',
       },
       requestContext: {
         accountId: '123456789012',
@@ -58,24 +58,19 @@ describe('Assert Get Withdraw presenter is correct at all', () => {
         time: '12/Mar/2020:19:03:58 +0000',
         timeEpoch: 1583348638390,
       },
-      body: 'Hello from client!',
+      body: {
+        notebookSerialNumber: 'ABC123',
+      },
       pathParameters: null,
       isBase64Encoded: null,
       stageVariables: null,
     }
 
-    const response = await handler(event, null)
+    const response = await handler(event, undefined)
 
-    expect(response?.statusCode).toEqual(200)
-    expect(response?.body).toEqual(
-      JSON.stringify({
-        notebookSerialNumber: 'GHI789',
-        studentRA: '23.00555-7',
-        name: 'Matue',
-        initTime: 1704074148000,
-        state: 'PENDING',
-        message: 'Withdraw has been retrieved successfully',
-      }),
+    expect(response['statusCode']).toEqual(201)
+    expect(JSON.parse(response['body'])['message']).toEqual(
+      'The withdraw was created successfully',
     )
   })
 })

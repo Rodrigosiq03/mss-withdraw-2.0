@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { GetAllWithdrawsUsecase } from './get_all_withdraw_usecase'
-import { GetAllWithdrawViewmodel } from './get_all_withdraw_viewmodel'
+import { GetAllWithdrawsViewModel } from './get_all_withdraw_viewmodel'
 import {
   BadRequest,
   InternalServerError,
@@ -22,7 +22,7 @@ export class GetAllWithdrawsController {
   async handle(request: IRequest) {
     try {
       const withdraws = await this.usecase.execute()
-      const viewModel = new GetAllWithdrawViewmodel(withdraws)
+      const viewModel = new GetAllWithdrawsViewModel(withdraws)
       return new OK(viewModel.toJSON())
     } catch (error) {
       if (error instanceof NoItemsFound) {
