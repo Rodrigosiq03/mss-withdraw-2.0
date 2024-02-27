@@ -1,13 +1,13 @@
 import { describe, it, expect } from 'vitest'
-import { UpdateWithdrawController } from '../../../src/modules/Withdraw/update_withdraw_state/app/update_withdraw_state_controller'
-import { UpdateWithdrawUsecase } from '../../../src/modules/Withdraw/update_withdraw_state/app/update_withdraw_state_usecase'
+import { UpdateWithdrawController } from '../../../src/modules/update_withdraw_state/app/update_withdraw_state_controller'
+import { UpdateWithdrawUsecase } from '../../../src/modules/update_withdraw_state/app/update_withdraw_state_usecase'
 import {
   BadRequest,
   OK,
   Unauthorized,
-} from '../../../../src/shared/helpers/external_interfaces/http_codes'
-import { WithdrawRepositoryMock } from '../../../../src/shared/infra/repositories/withdraw_repository_mock'
-import { HttpRequest } from '../../../../src/shared/helpers/external_interfaces/http_models'
+} from '../../../src/shared/helpers/external_interfaces/http_codes'
+import { WithdrawRepositoryMock } from '../../../src/shared/infra/repositories/withdraw_repository_mock'
+import { HttpRequest } from '../../../src/shared/helpers/external_interfaces/http_models'
 
 describe('UpdateWithdrawController Tests', () => {
   it('Should update withdraw state successfully when user is admin', async () => {
