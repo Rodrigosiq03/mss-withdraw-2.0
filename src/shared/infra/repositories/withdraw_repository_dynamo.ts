@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Environments } from '@/shared/environments'
 import { Withdraw } from '../../../shared/domain/entities/withdraw'
 import { IWithdrawRepository } from '../../../shared/domain/repositories/withdraw_repository_interface'
@@ -23,9 +24,9 @@ export class WithdrawRepositoryDynamo implements IWithdrawRepository {
 
 
   async createWithdraw(notebookSerialNumber: string, studentRA: string, name: string, initTime: number): Promise<Withdraw> {
-    const resp = this.dynamo.getItem(WithdrawRepositoryDynamo.partitionKeyFormat(notebookSerialNumber), WithdrawRepositoryDynamo.sortKeyFormat(notebookSerialNumber))
+    const resp = await this.dynamo.getItem(WithdrawRepositoryDynamo.partitionKeyFormat(notebookSerialNumber), WithdrawRepositoryDynamo.sortKeyFormat(notebookSerialNumber))
 
-    if (!resp['Ítem']) {
+    if (!resp['Item']) {
       throw new NoItemsFound('notebookSerialNumber')
     }
 
@@ -52,8 +53,8 @@ export class WithdrawRepositoryDynamo implements IWithdrawRepository {
   getWithdrawByNotebookSerialNumber(notebookSerialNumber: string): Promise<Withdraw> {
     throw new Error('Method not implemented.')
   }
-  getAllWithdraws(): Promise<Withdraw[]> {
-    const resp = this.dynamo.getAllItems()
+  async getAllWithdraws(): Promise<Withdraw[]> {
+    const resp = await this.dynamo.getAllItems()
 
     if (!resp['Ítems']) {
       throw new NoItemsFound('this dynamo table')
@@ -61,7 +62,7 @@ export class WithdrawRepositoryDynamo implements IWithdrawRepository {
 
     const withdraws: Withdraw[] = []
 
-    for (var withdrawDynamo in resp['Items']) {
+    for (const withdrawDynamo in resp['Items']) {
       const withdrawDto = WithdrawDynamoDTO.fromDynamo(withdrawDynamo)
       const withdrawEntity = withdrawDto.toEntity()
       withdraws.push(withdrawEntity)
@@ -69,8 +70,8 @@ export class WithdrawRepositoryDynamo implements IWithdrawRepository {
 
     return Promise.resolve(withdraws)
   }
-  updateWithdrawByNotebookSerialNumber(notebookSerialNumber: string, isChecked: boolean): Promise<Withdraw> {
-    const resp = this.dynamo.getItem(WithdrawRepositoryDynamo.partitionKeyFormat(notebookSerialNumber), WithdrawRepositoryDynamo.sortKeyFormat(notebookSerialNumber))
+  async updateWithdrawByNotebookSerialNumber(notebookSerialNumber: string, isChecked: boolean): Promise<Withdraw> {
+    const resp = await this.dynamo.getItem(WithdrawRepositoryDynamo.partitionKeyFormat(notebookSerialNumber), WithdrawRepositoryDynamo.sortKeyFormat(notebookSerialNumber))
 
     if (!resp['Item']) {
       throw new NoItemsFound('notebookSerialNumber')
