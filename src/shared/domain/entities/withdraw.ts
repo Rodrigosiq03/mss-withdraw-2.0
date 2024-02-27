@@ -3,8 +3,8 @@ import { STATE } from '../enums/state_enum'
 
 export interface WithdrawProps {
   notebookSerialNumber: string
-  studentRA?: string
-  name?: string
+  studentRA?: string 
+  name?: string 
   initTime?: number
   finishTime?: number
   state: STATE
@@ -57,8 +57,8 @@ export class Withdraw {
     return this.props.studentRA
   }
 
-  setStudentRA(studentRA: string) {
-    if (!Withdraw.validateStudentRA(studentRA)) {
+  setStudentRA(studentRA?: string) {
+    if (studentRA !== undefined && !Withdraw.validateStudentRA(studentRA)) {
       throw new EntityError('studentRA')
     }
     this.props.studentRA = studentRA
@@ -68,7 +68,7 @@ export class Withdraw {
     return this.props.name
   }
 
-  setName(name: string) {
+  setName(name?: string) {
     this.props.name = name
   }
 
@@ -76,8 +76,8 @@ export class Withdraw {
     return this.props.initTime
   }
 
-  setInitTime(initTime: number) {
-    if (!Withdraw.validateTime(initTime)) {
+  setInitTime(initTime?: number) {
+    if (initTime !== undefined && !Withdraw.validateTime(initTime)) {
       throw new EntityError('initTime')
     }
     this.props.initTime = initTime
@@ -87,7 +87,7 @@ export class Withdraw {
     return this.props.finishTime
   }
 
-  setFinishTime(finishTime: number) {
+  setFinishTime(finishTime?: number) {
     if (finishTime !== undefined && !Withdraw.validateTime(finishTime)) {
       throw new EntityError('finishTime')
     }
@@ -105,10 +105,8 @@ export class Withdraw {
     this.props.state = state
   }
 
-  static validateNotebookSerialNumber(notebookSerialNumber: string): boolean {
+  static validateNotebookSerialNumber(notebookSerialNumber?: string): boolean {
     return (
-      notebookSerialNumber !== undefined &&
-      notebookSerialNumber !== null &&
       typeof notebookSerialNumber === 'string' &&
       notebookSerialNumber.length > 0 &&
       notebookSerialNumber.length !== 0 &&
@@ -116,15 +114,16 @@ export class Withdraw {
     )
   }
 
-  static validateStudentRA(studentRA: string): boolean {
+  static validateStudentRA(studentRA?: string): boolean {
+    if (studentRA === undefined) {
+      return true
+    }
     const raPattern = /^\d{2}\.\d{5}-[0-9]$/
     return raPattern.test(studentRA)
   }
 
-  static validateTime(time: number | undefined): boolean {
+  static validateTime(time?: number): boolean {
     if (
-      time === null ||
-      time === undefined ||
       typeof time !== 'number' ||
       isNaN(time)
     ) {
