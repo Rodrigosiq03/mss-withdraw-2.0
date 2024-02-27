@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
 import { describe, it, expect } from 'vitest'
-import { handler } from '../../../../../src/modules/Withdraw/update_withdraw_state/app/update_withdraw_state_presenter'
+import { handler } from '../../../../../src/modules/Withdraw/finish_withdraw/app/finish_withdraw_presenter'
 import envs from '../../../../..'
 import jwt from 'jsonwebtoken'
 import { WithdrawRepositoryMock } from '../../../../../src/shared/infra/repositories/withdraw_repository_mock'
@@ -31,7 +31,7 @@ describe('Finish Withdraw Presenter Tests', () => {
         authorization: `Bearer ${token}`,
       },
       queryStringParameters: {
-        notebookSerialNumber: 'MNO345',
+        notebookSerialNumber: 'GHI789',
       },
       requestContext: {
         accountId: '123456789012',
@@ -63,10 +63,7 @@ describe('Finish Withdraw Presenter Tests', () => {
         time: '12/Mar/2020:19:03:58 +0000',
         timeEpoch: 1583348638390,
       },
-      body: {
-        notebookSerialNumber: 'GHI789',
-        state: true,
-      },
+      body: {},
       pathParameters: null,
       isBase64Encoded: null,
       stageVariables: null,
@@ -78,8 +75,6 @@ describe('Finish Withdraw Presenter Tests', () => {
     const response = await handler(event, {})
 
     expect(response.statusCode).toBe(200)
-    expect(response.body).toBe({
-      message: 'The withdraw finished successfully',
-    })
+    expect(response.body).toEqual(JSON.stringify({ message: "The withdraw finished successfully" }))
   })
 })
