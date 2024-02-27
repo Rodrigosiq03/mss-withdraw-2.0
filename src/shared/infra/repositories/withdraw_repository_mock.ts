@@ -108,4 +108,18 @@ export class WithdrawRepositoryMock implements IWithdrawRepository {
 
     return this.activeWithdraws[index]
   }
+
+  async finishWithdrawByNotebookSerialNumber(notebookSerialNumber: string): Promise<Withdraw> {
+    const index = this.activeWithdraws.findIndex((w) => w.notebookSerialNumber === notebookSerialNumber)
+    if (index === -1) {
+      throw new NoItemsFound('props.notebookSerialNumber')
+    }
+
+    this.activeWithdraws[index].setState(STATE.INACTIVE)
+    this.activeWithdraws[index].setFinishTime(undefined)
+    this.activeWithdraws[index].setStudentRA(undefined)
+    this.activeWithdraws[index].setName(undefined)
+
+    return this.activeWithdraws[index]
+  }
 }

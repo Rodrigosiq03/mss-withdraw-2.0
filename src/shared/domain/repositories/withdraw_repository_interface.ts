@@ -10,4 +10,5 @@ export interface IWithdrawRepository {
   getWithdrawByNotebookSerialNumber(notebookSerialNumber: string): Promise<Withdraw>
   getAllWithdraws(): Promise<Withdraw[]>
   updateWithdrawByNotebookSerialNumber(notebookSerialNumber: string, isChecked: boolean): Promise<Withdraw>
+  finishWithdrawByNotebookSerialNumber(notebookSerialNumber: string ): Promise<Withdraw>
 }
