@@ -75,6 +75,8 @@ describe('Finish Withdraw Presenter Tests', () => {
     const response = await handler(event, {})
 
     expect(response.statusCode).toBe(200)
-    expect(response.body).toEqual(JSON.stringify({ message: "The withdraw finished successfully" }))
+    expect(response.body).toEqual(
+      JSON.stringify({ message: 'The withdraw finished successfully' }),
+    )
   })
 })
