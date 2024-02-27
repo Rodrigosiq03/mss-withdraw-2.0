@@ -24,7 +24,7 @@ describe('UpdateWithdrawController Tests', () => {
 
     expect(response).toBeInstanceOf(OK)
     const responseBody = response.body
-    expect(responseBody.message).toBe('The withdraw was updated successfully')
+    expect(responseBody.message).toBe('The withdraw state updated successfully')
   })
 
   it('Should return Unauthorized when user is not authenticated', async () => {

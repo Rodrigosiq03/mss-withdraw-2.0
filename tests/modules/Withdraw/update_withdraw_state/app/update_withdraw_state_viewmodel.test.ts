@@ -6,7 +6,7 @@ describe('Assert Update Withdraw viewmodel is correct at all', () => {
     const withdrawViewModel = new UpdateWithdrawViewModel().toJSON()
 
     expect(withdrawViewModel).toEqual({
-      message: 'The withdraw was updated successfully',
+      message: 'The withdraw state updated successfully',
     })
   })
 })
