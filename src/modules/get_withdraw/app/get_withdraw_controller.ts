@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 import { GetWithdrawUseCase } from './get_withdraw_usecase'
-import { WithdrawViewModel } from './get_withdraw_viewmodel'
+import { GetWithdrawViewModel } from './get_withdraw_viewmodel'
 import {
   BadRequest,
   InternalServerError,
@@ -43,7 +43,7 @@ export class GetWithdrawByNotebookSerialNumberController {
 
       const notebookSerialNumber = request.data.notebookSerialNumber
       const withdraw = await this.usecase.execute(notebookSerialNumber)
-      const viewModel = new WithdrawViewModel(withdraw)
+      const viewModel = new GetWithdrawViewModel(withdraw)
 
       return new OK(viewModel.toJSON())
     } catch (error: any) {
