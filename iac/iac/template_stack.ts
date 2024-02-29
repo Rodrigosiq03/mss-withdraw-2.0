@@ -8,9 +8,9 @@ export class TemplateStack extends Stack {
   constructor(scope: Construct, constructId: string, props?: StackProps) {
     super(scope, constructId, props)
 
-    const restApi = new RestApi(this, 'Template_RestApi', {
-      restApiName: 'Template_RestApi',
-      description: 'This is the Template RestApi',
+    const restApi = new RestApi(this, 'NoteMauaWithdrawRESTAPI', {
+      restApiName: 'NoteMauaWithdrawRESTAPI',
+      description: 'This is the REST API for the NoteMaua mss withdraw service.',
       defaultCorsPreflightOptions: {
         allowOrigins: Cors.ALL_ORIGINS,
         allowMethods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
@@ -18,7 +18,7 @@ export class TemplateStack extends Stack {
       }
     })
 
-    const apigatewayResource = restApi.root.addResource('mss-template', {
+    const apigatewayResource = restApi.root.addResource('mss-withdraw', {
       defaultCorsPreflightOptions: {
         allowOrigins: Cors.ALL_ORIGINS,
         allowMethods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
@@ -26,7 +26,8 @@ export class TemplateStack extends Stack {
       }
     })
 
-    const dynamoTable = new TemplateDynamoTable(this, 'UserMssTemplateTable')
+    const dynamoTable = new TemplateDynamoTable(this, 'WithdrawDynamoTable', process.env.DYNAMO_TABLE_NAME, 'NoteMauaMssWithdrawDynamoTable')
+    const dynamoTableHistory = new TemplateDynamoTable(this, 'WithdrawHistoryDynamoTable', process.env.DYNAMO_TABLE_NAME, 'NoteMauaMssWithdrawHistoryDynamoTable')
 
     const ENVIRONMENT_VARIABLES = {
       'STAGE': process.env.STAGE,
@@ -34,15 +35,21 @@ export class TemplateStack extends Stack {
       'DYNAMO_PARTITION_KEY': 'PK',
       'DYNAMO_SORT_KEY': 'SK',
       'REGION': process.env.REGION,
-      'ENDPOINT_URL': process.env.ENDPOINT_URL
+      'ENDPOINT_URL': process.env.ENDPOINT_URL,
+      'DYNAMO_TABLE_NAME_HISTORY': process.env.DYNAMO_TABLE_NAME_HISTORY,
+      'JWT_SECRET': process.env.JWT_SECRET,
+      'MAIL_USER': process.env.MAIL_USER,
+      'MAIL_PASSWORD': process.env.MAIL_PASSWORD
     }
 
     const lambdaStack = new LambdaStack(this, apigatewayResource, ENVIRONMENT_VARIABLES)
 
-    dynamoTable.table.grantReadWriteData(lambdaStack.getUserFunction)
-    dynamoTable.table.grantReadWriteData(lambdaStack.createUserFunction)
-    dynamoTable.table.grantReadWriteData(lambdaStack.deleteUserFunction)
-    dynamoTable.table.grantReadWriteData(lambdaStack.updateUserFunction)
-    dynamoTable.table.grantReadWriteData(lambdaStack.getAllUsersFunction)
+    dynamoTable.table.grantReadWriteData(lambdaStack.getWithdrawFunction)
+    dynamoTable.table.grantReadWriteData(lambdaStack.createWithdrawFunction)
+    dynamoTable.table.grantReadWriteData(lambdaStack.finishWithdrawFunction)
+    dynamoTable.table.grantReadWriteData(lambdaStack.updateWithdrawStateFunction)
+    dynamoTable.table.grantReadWriteData(lambdaStack.getAllWithdrawFunction)
+    
+    dynamoTableHistory.table.grantReadWriteData(lambdaStack.finishWithdrawFunction)
   }
 }
