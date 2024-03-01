@@ -30,10 +30,10 @@ if (stackName === 'prod') {
 }
 
 const tags = {
-  'project': 'Template',
-  'stage': 'test',
+  'project': 'NoteMauaMssWithdraw',
+  'stage': 'DEV',
   'stack': 'BACK',
-  'owner': 'Digao'
+  'owner': 'DevDinasty',
 }
 
 new TemplateStack(app, stackName as string, {
