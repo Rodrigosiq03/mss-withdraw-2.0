@@ -155,6 +155,7 @@ export class DynamoDatasource {
   }
 
   async getAllItems(): Promise<any> {
+    console.log('[GET-ALL-ITEMS] - (DYNAMO_DATASOURCE) - (DYNAMO_TABLE_NAME) - ', this.dynamoTableName)
     const items: any[] = []
     let lastEvaluatedKey: Record<string, any> | undefined
 

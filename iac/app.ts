@@ -2,8 +2,7 @@
 import * as cdk from 'aws-cdk-lib'
 import { TemplateStack } from './iac/template_stack'
 import { adjustLayerDirectory } from './adjust_layer_directory'
-import { config } from 'dotenv'
-config()
+import envs from '..'
 
 console.log('Starting the CDK')
 
@@ -13,9 +12,9 @@ console.log('Finished adjusting the layer directory')
 
 const app = new cdk.App()
 
-const awsRegion = process.env.REGION
-const awsAccount = process.env.AWS_ACCOUNT_ID
-const stackName = process.env.STACK_NAME
+const awsRegion = envs.REGION
+const awsAccount = envs.AWS_ACCOUNT_ID
+const stackName = envs.STACK_NAME
 
 let stage = ''
 

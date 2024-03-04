@@ -32,11 +32,11 @@ export class WithdrawDynamoDTO {
   static fromEntity(withdraw: Withdraw):WithdrawDynamoDTO {
     return new WithdrawDynamoDTO({
       notebookSerialNumber: withdraw.notebookSerialNumber,
-      name: withdraw.name ?? '',
-      studentRA: withdraw.studentRA ?? '',
+      name: withdraw.name,
+      studentRA: withdraw.studentRA,
       state: withdraw.state as STATE,
-      initTime: withdraw.initTime ?? 0,
-      finishTime: withdraw.finishTime ?? 0
+      initTime: withdraw.initTime,
+      finishTime: withdraw.finishTime
     })
   }
 
@@ -71,11 +71,11 @@ export class WithdrawDynamoDTO {
       undefined
     const initTime = withdrawData['initTime'] && 
       withdrawData['initTime']['N'] ? 
-      Number(withdrawData['initTime']['N']) : 
+      withdrawData['initTime']['N'] : 
       undefined
     const finishTime = withdrawData['finishTime'] && 
       withdrawData['finishTime']['N'] ? 
-      Number(withdrawData['finishTime']['N']) : 
+      withdrawData['finishTime']['N'] : 
       undefined
     return new WithdrawDynamoDTO({
       notebookSerialNumber,
