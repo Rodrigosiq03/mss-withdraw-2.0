@@ -1,6 +1,6 @@
-import { Withdraw } from '../../../shared/domain/entities/withdraw'
-import { IWithdrawRepository } from '../../../shared/domain/repositories/withdraw_repository_interface'
-import { EntityError } from '../../../shared/helpers/errors/domain_errors'
+import { Withdraw } from '../../../../src/shared/domain/entities/withdraw'
+import { IWithdrawRepository } from '../../../../src/shared/domain/repositories/withdraw_repository_interface'
+import { EntityError } from '../../../../src/shared/helpers/errors/domain_errors'
 
 export class CreateWithdrawUsecase {
   constructor(private repo: IWithdrawRepository) {}

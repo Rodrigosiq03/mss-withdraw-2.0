@@ -27,36 +27,30 @@ export class TemplateStack extends Stack {
       }
     })
 
-    console.log('envs', envs)
-
-    if (envs.DYNAMO_TABLE_NAME === undefined && envs.DYNAMO_TABLE_NAME_HISTORY === undefined) {
-      throw new Error('Dynamo table names are not defined')
-    }
-
-    const dynamoTable = new TemplateDynamoTable(this, 'WithdrawDynamoTable', 'NoteMauaMssWithdrawDynamoTable',envs.DYNAMO_TABLE_NAME)
-    const dynamoTableHistory = new TemplateDynamoTable(this, 'WithdrawHistoryDynamoTable', 'NoteMauaMssWithdrawHistoryDynamoTable', envs.DYNAMO_TABLE_NAME_HISTORY)
+    const dynamoTable = new TemplateDynamoTable(this, 'WithdrawDynamoTable', process.env.DYNAMO_TABLE_NAME, 'NoteMauaMssWithdrawDynamoTable')
+    const dynamoTableHistory = new TemplateDynamoTable(this, 'WithdrawHistoryDynamoTable', process.env.DYNAMO_TABLE_NAME, 'NoteMauaMssWithdrawHistoryDynamoTable')
 
     const ENVIRONMENT_VARIABLES = {
       'STAGE': envs.STAGE,
       'DYNAMO_TABLE_NAME': envs.DYNAMO_TABLE_NAME,
       'DYNAMO_PARTITION_KEY': 'PK',
       'DYNAMO_SORT_KEY': 'SK',
-      'REGION': envs.REGION,
-      'ENDPOINT_URL': envs.ENDPOINT_URL,
-      'DYNAMO_TABLE_NAME_HISTORY': envs.DYNAMO_TABLE_NAME_HISTORY,
-      'JWT_SECRET': envs.JWT_SECRET,
-      'MAIL_USER': envs.MAIL_USER,
-      'MAIL_PASSWORD': envs.MAIL_PASSWORD
+      'REGION': process.env.REGION,
+      'ENDPOINT_URL': process.env.ENDPOINT_URL,
+      'DYNAMO_TABLE_NAME_HISTORY': process.env.DYNAMO_TABLE_NAME_HISTORY,
+      'JWT_SECRET': process.env.JWT_SECRET,
+      'MAIL_USER': process.env.MAIL_USER,
+      'MAIL_PASSWORD': process.env.MAIL_PASSWORD
     }
 
     const lambdaStack = new LambdaStack(this, apigatewayResource, ENVIRONMENT_VARIABLES)
 
+    dynamoTable.table.grantReadWriteData(lambdaStack.getWithdrawFunction)
     dynamoTable.table.grantReadWriteData(lambdaStack.createWithdrawFunction)
     dynamoTable.table.grantReadWriteData(lambdaStack.finishWithdrawFunction)
-    dynamoTable.table.grantReadWriteData(lambdaStack.getAllWithdrawsFunction)
-    dynamoTable.table.grantReadWriteData(lambdaStack.getWithdrawFunction)
     dynamoTable.table.grantReadWriteData(lambdaStack.updateWithdrawStateFunction)
-
+    dynamoTable.table.grantReadWriteData(lambdaStack.getAllWithdrawFunction)
+    
     dynamoTableHistory.table.grantReadWriteData(lambdaStack.finishWithdrawFunction)
   }
 }

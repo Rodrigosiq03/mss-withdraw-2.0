@@ -46,6 +46,12 @@ export class WithdrawRepositoryDynamo implements IWithdrawRepository {
 
     const itemToUpdate: Record<string, any> = {}
 
+    // const updateds = {
+    //   studentRA,
+    //   name,
+    //   initTime
+    // }
+
     itemToUpdate['studentRA'] = studentRA
     itemToUpdate['name'] = name
     itemToUpdate['initTime'] = initTime
@@ -63,22 +69,6 @@ export class WithdrawRepositoryDynamo implements IWithdrawRepository {
 
     return Promise.resolve(withdrawDto)
   }
-
-  async addWithdraw(withdraw: Withdraw): Promise<Withdraw> {
-
-    const withdrawDto = WithdrawDynamoDTO.fromEntity(withdraw)
-    await this.dynamo.putItem(withdrawDto.toDynamo(), WithdrawRepositoryDynamo.partitionKeyFormat(withdraw.notebookSerialNumber), WithdrawRepositoryDynamo.sortKeyFormat(withdraw.notebookSerialNumber))
-
-    return Promise.resolve(withdrawDto.toEntity())
-  }
-  
-  async deleteWithdraw(notebookSerialNumber: string): Promise<void> {
-    await this.dynamo.deleteItem(
-      WithdrawRepositoryDynamo.partitionKeyFormat(notebookSerialNumber),
-      WithdrawRepositoryDynamo.sortKeyFormat(notebookSerialNumber),
-    )
-  }
-
   async getWithdrawByNotebookSerialNumber(
     notebookSerialNumber: string,
   ): Promise<Withdraw> {
@@ -86,8 +76,6 @@ export class WithdrawRepositoryDynamo implements IWithdrawRepository {
       WithdrawHistoryRepositoryDynamo.partitionKeyFormat(notebookSerialNumber),
       WithdrawRepositoryDynamo.sortKeyFormat(notebookSerialNumber),
     )
-    console.log('repo', repo)
-
     if (!repo['Item']) {
       throw new NoItemsFound('notebookSerialNumber')
     }
@@ -98,9 +86,7 @@ export class WithdrawRepositoryDynamo implements IWithdrawRepository {
   async getAllWithdraws(): Promise<Withdraw[]> {
     const resp = await this.dynamo.getAllItems()
 
-    console.log('resp', resp)
-
-    if (!resp['Items']) {
+    if (!resp['Ítems']) {
       throw new NoItemsFound('this dynamo table')
     }
 

@@ -2,7 +2,7 @@
 
 import { describe, it, expect } from 'vitest'
 import { handler } from '../../../../src/modules/finish_withdraw/app/finish_withdraw_presenter'
-import envs from '../../../..'
+import envs from '../../../../'
 import jwt from 'jsonwebtoken'
 import { WithdrawRepositoryMock } from '../../../../src/shared/infra/repositories/withdraw_repository_mock'
 import { FinishWithdrawController } from '../../../../src/modules/finish_withdraw/app/finish_withdraw_controller'

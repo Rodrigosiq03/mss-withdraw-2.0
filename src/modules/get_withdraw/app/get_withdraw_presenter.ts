@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-import { getUserFromToken } from '../../../../src/shared/middlewares/jwt_middleware'
+import { getUserFromToken } from '../../../shared/middlewares/jwt_middleware'
 import { Environments } from '../../../shared/environments'
 import {
   LambdaHttpRequest,

@@ -1,9 +1,9 @@
 import { describe, it, expect } from 'vitest'
-import { FinishWithdrawController } from '../../../../src/modules/finish_withdraw/app/finish_withdraw_controller'
+import { FinishWithdrawController } from '../../../../src/modules/finish_withdraw/app/finish_withdraw_controller' 
 import { FinishWithdrawUsecase } from '../../../../src/modules/finish_withdraw/app/finish_withdraw_usecase'
 import {
   OK,
-  Unauthorized,
+  Unauthorized
 } from '../../../../src/shared/helpers/external_interfaces/http_codes'
 import { WithdrawRepositoryMock } from '../../../../src/shared/infra/repositories/withdraw_repository_mock'
 import { HttpRequest } from '../../../../src/shared/helpers/external_interfaces/http_models'

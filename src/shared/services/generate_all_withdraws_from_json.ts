@@ -11,10 +11,5 @@ export function generateAllWithdrawsFromJson() {
     })
     withdraws.push(withdraw)
   }
-  console.log('withdraws[0]', withdraws[0].initTime)
-  console.log('withdraws[0]', withdraws[0].finishTime)
-  console.log('withdraws[0]', withdraws[0].studentRA)
   return withdraws
 }
-
-generateAllWithdrawsFromJson()

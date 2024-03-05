@@ -1,6 +1,6 @@
 import { expect, it, describe } from 'vitest'
-import { handler } from '../../.././../src/modules/get_withdraw/app/get_withdraw_presenter'
-import envs from '../../../..'
+import { handler } from '../../../../src/modules/get_withdraw/app/get_withdraw_presenter'
+import envs from '../../../../'
 import jwt from 'jsonwebtoken'
 
 describe('Assert Get Withdraw presenter is correct at all', () => {

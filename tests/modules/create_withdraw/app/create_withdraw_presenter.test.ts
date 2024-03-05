@@ -1,8 +1,7 @@
 import { describe, it, expect } from 'vitest'
-
-import jwt from 'jsonwebtoken'
-import envs from '../../../..'
 import { handler } from '../../../../src/modules/create_withdraw/app/create_withdraw_presenter'
+import jwt from 'jsonwebtoken'
+import envs from '../../../../'
 
 describe('Assert Create Withdraw presenter is correct at all', async () => {
   const user = {

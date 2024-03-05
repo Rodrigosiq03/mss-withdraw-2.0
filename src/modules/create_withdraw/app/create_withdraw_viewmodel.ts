@@ -1,6 +1,5 @@
-import { Withdraw } from "../../../shared/domain/entities/withdraw"
-import { STATE } from "../../../shared/domain/enums/state_enum"
-
+import { Withdraw } from '../../../../src/shared/domain/entities/withdraw'
+import { STATE } from '../../../../src/shared/domain/enums/state_enum'
 
 export class CreateViewmodel {
   private notebookSerialNumber: string

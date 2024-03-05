@@ -5,7 +5,7 @@ declare namespace NodeJS {
     STACK_NAME: string
     AWS_ACCOUNT_ID: string
     DYNAMO_TABLE_NAME: string
-    DYNAOMO_TABLE_NAME_HISTORY: string
+    DYNAMO_TABLE_NAME_HISTORY: string
     DYNAMO_PARTITION_KEY: string
     DYNAMO_SORT_KEY: string
     ENDPOINT_URL: string

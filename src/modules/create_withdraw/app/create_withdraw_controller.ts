@@ -14,7 +14,7 @@ import {
 } from '../../../shared/helpers/external_interfaces/http_codes'
 import { CreateWithdrawUsecase } from './create_withdraw_usecase'
 import { CreateViewmodel } from './create_withdraw_viewmodel'
-import { Withdraw } from '../../../shared/domain/entities/withdraw'
+import { Withdraw } from '../../../../src/shared/domain/entities/withdraw'
 import { ForbiddenAction, NoItemsFound } from '../../../shared/helpers/errors/usecase_errors'
 
 export class CreateWithdrawController {
