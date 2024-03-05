@@ -17,7 +17,7 @@ describe('Assert Get Withdraw viewmodel is correct at all', () => {
     expect(withdrawViewmodel).toEqual({
       notebookSerialNumber: 'ABC123',
       studentRA: '23.00335-9',
-      name: '',
+      name: undefined,
       initTime: 1704074148000,
       state: 'PENDING',
       message: 'Withdraw has been retrieved successfully',

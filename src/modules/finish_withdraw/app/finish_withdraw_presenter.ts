@@ -16,7 +16,7 @@ const controller = new FinishWithdrawController(usecase)
 
 export async function finishWithdrawPresenter(event: Record<string, any>) {
   const httpRequest = new LambdaHttpRequest(event)
-  const decoded = getUserFromToken(httpRequest)
+  const decoded = getUserFromToken(httpRequest.data.Authorization)
   const response = await controller.handle(httpRequest, decoded)
   const httpResponse = new LambdaHttpResponse(
     response?.body,

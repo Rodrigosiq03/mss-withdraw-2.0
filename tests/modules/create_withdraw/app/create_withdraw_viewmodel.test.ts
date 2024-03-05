@@ -39,8 +39,8 @@ describe('CreateViewmodel', () => {
     const expectedViewModel = {
       notebookSerialNumber: 'ABC123',
       studentRA: '23.00335-9',
-      initTime: 0,
-      finishTime: 0,
+      initTime: undefined,
+      finishTime: undefined,
       state: STATE.PENDING,
       message: 'The withdraw was created successfully',
     }

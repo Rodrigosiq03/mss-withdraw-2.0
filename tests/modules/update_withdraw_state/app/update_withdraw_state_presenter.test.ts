@@ -1,21 +1,24 @@
-import { describe, it, expect } from 'vitest'
-import { handler } from '../../../../src/modules/create_withdraw/app/create_withdraw_presenter'
-import jwt from 'jsonwebtoken'
-import envs from '../../../../'
+/* eslint-disable @typescript-eslint/no-unused-vars */
 
-describe('Assert Create Withdraw presenter is correct at all', async () => {
+import { describe, it, expect } from 'vitest'
+import { handler } from '../../../../src/modules/update_withdraw_state/app/update_withdraw_state_presenter'
+import envs from '../../../..'
+import jwt from 'jsonwebtoken'
+import { WithdrawRepositoryMock } from '../../../../src/shared/infra/repositories/withdraw_repository_mock'
+import { UpdateWithdrawController } from '../../../../src/modules/update_withdraw_state/app/update_withdraw_state_controller'
+import { UpdateWithdrawUsecase } from '../../../../src/modules/update_withdraw_state/app/update_withdraw_state_usecase'
+
+describe('Update Withdraw State Presenter Tests', () => {
   const user = {
-    role: 'STUDENT',
-    name: 'Luca Pinheiro Gomes',
-    ra: '23.00555-7',
+    role: 'EMPLOYEE',
   }
   const secret = envs.JWT_SECRET
 
   if (secret === undefined) throw Error('JWT_SECRET is not defined')
 
-  const token = jwt.sign({ user: JSON.stringify(user)}, secret)
+  const token = jwt.sign({ user: JSON.stringify(user) }, secret)
 
-  it('Should activate presenter correctly', async () => {
+  it('Should update withdraw state successfully when creating', async () => {
     const event = {
       version: '2.0',
       routeKey: '$default',
@@ -28,7 +31,7 @@ describe('Assert Create Withdraw presenter is correct at all', async () => {
         Authorization: `Bearer ${token}`,
       },
       queryStringParameters: {
-        parameter1: 'value1',
+        notebookSerialNumber: 'MNO345',
       },
       requestContext: {
         accountId: '123456789012',
@@ -61,18 +64,22 @@ describe('Assert Create Withdraw presenter is correct at all', async () => {
         timeEpoch: 1583348638390,
       },
       body: {
-        notebookSerialNumber: 'ABC123',
+        notebookSerialNumber: 'GHI789',
+        state: true,
       },
       pathParameters: null,
       isBase64Encoded: null,
       stageVariables: null,
     }
 
-    const response = await handler(event, undefined)
+    const repoMock = new WithdrawRepositoryMock()
+    const usecase = new UpdateWithdrawUsecase(repoMock)
+    const controller = new UpdateWithdrawController(usecase)
+    const response = await handler(event, {})
 
-    expect(response['statusCode']).toEqual(201)
-    expect(JSON.parse(response['body'])['message']).toEqual(
-      'The withdraw was created successfully',
+    expect(response?.statusCode).toEqual(200)
+    expect(response?.body).toEqual(
+      JSON.stringify({ message: 'The withdraw state updated successfully' }),
     )
   })
 })

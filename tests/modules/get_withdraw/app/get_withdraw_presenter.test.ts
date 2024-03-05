@@ -23,7 +23,7 @@ describe('Assert Get Withdraw presenter is correct at all', () => {
       headers: {
         header1: 'value1',
         header2: 'value1,value2',
-        authorization: `Bearer ${token}`,
+        Authorization: `Bearer ${token}`,
       },
       queryStringParameters: {
         notebookSerialNumber: 'GHI789',

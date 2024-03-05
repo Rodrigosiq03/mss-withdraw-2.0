@@ -28,7 +28,7 @@ describe('Finish Withdraw Presenter Tests', () => {
       headers: {
         header1: 'value1',
         header2: 'value1,value2',
-        authorization: `Bearer ${token}`,
+        Authorization: `Bearer ${token}`,
       },
       queryStringParameters: {
         notebookSerialNumber: 'GHI789',

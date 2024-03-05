@@ -20,9 +20,9 @@ describe('Assert Create Withdraw usecase is correct at all', () => {
 
     expect(viewModel.toJSON()).toEqual({
       notebookSerialNumber: 'ABC123',
-      studentRA: '',
-      initTime: 0,
-      finishTime: 0,
+      studentRA: undefined,
+      initTime: undefined,
+      finishTime: undefined,
       state: STATE.PENDING,
       message: 'The withdraw was created successfully',
     })

@@ -3,17 +3,17 @@ import { STATE } from '../../../../src/shared/domain/enums/state_enum'
 
 export class CreateViewmodel {
   private notebookSerialNumber: string
-  private studentRA: string
-  private initTime: number
+  private studentRA?: string
+  private initTime?: number
   private finishTime?: number
   private state: STATE
 
   constructor(withdraw: Withdraw) {
     this.notebookSerialNumber = withdraw.notebookSerialNumber
-    this.studentRA = withdraw.studentRA ?? ''
-    this.initTime = withdraw.initTime ?? 0
-    this.finishTime = withdraw.finishTime ?? 0
-    this.state = (withdraw.state as STATE) ?? STATE.INACTIVE
+    this.studentRA = withdraw.studentRA
+    this.initTime = withdraw.initTime
+    this.finishTime = withdraw.finishTime
+    this.state = withdraw.state
   }
 
   toJSON() {

@@ -29,6 +29,16 @@ export class WithdrawRepositoryDynamo implements IWithdrawRepository {
     ),
   ) {}
 
+  async addWithdraw(withdraw: Withdraw): Promise<Withdraw> {
+    const withdrawDto = WithdrawDynamoDTO.fromEntity(withdraw)
+
+    await this.dynamo.putItem(withdrawDto.toDynamo(),
+      WithdrawRepositoryDynamo.partitionKeyFormat(withdraw.notebookSerialNumber),
+      WithdrawRepositoryDynamo.sortKeyFormat(withdraw.notebookSerialNumber)
+    )
+    return Promise.resolve(withdrawDto.toEntity())
+  }
+
   async createWithdraw(
     notebookSerialNumber: string,
     studentRA: string,

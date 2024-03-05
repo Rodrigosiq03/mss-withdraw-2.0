@@ -3,10 +3,10 @@ import { STATE } from '../../../../src/shared/domain/enums/state_enum'
 
 export class WithdrawViewModel {
   private notebookSerialNumber: string
-  private studentRA: string | undefined
-  private name: string | undefined
-  private initTime: number | undefined
-  private finishTime: number | undefined
+  private studentRA?: string
+  private name?: string
+  private initTime?: number
+  private finishTime?: number
   private state: STATE
 
   constructor(withdraw: WithdrawProps) {

@@ -3,6 +3,7 @@ import { Cors, RestApi } from 'aws-cdk-lib/aws-apigateway'
 import { Construct } from 'constructs'
 import { TemplateDynamoTable } from './template_dynamo_table'
 import { LambdaStack } from './lambda_stack'
+import envs from '../../index'
 
 export class TemplateStack extends Stack {
   constructor(scope: Construct, constructId: string, props?: StackProps) {
@@ -30,8 +31,8 @@ export class TemplateStack extends Stack {
     const dynamoTableHistory = new TemplateDynamoTable(this, 'WithdrawHistoryDynamoTable', process.env.DYNAMO_TABLE_NAME, 'NoteMauaMssWithdrawHistoryDynamoTable')
 
     const ENVIRONMENT_VARIABLES = {
-      'STAGE': process.env.STAGE,
-      'DYNAMO_TABLE_NAME': process.env.DYNAMO_TABLE_NAME,
+      'STAGE': envs.STAGE,
+      'DYNAMO_TABLE_NAME': envs.DYNAMO_TABLE_NAME,
       'DYNAMO_PARTITION_KEY': 'PK',
       'DYNAMO_SORT_KEY': 'SK',
       'REGION': process.env.REGION,
