@@ -3,9 +3,9 @@ import { STATE } from '../../../shared/domain/enums/state_enum'
 
 export class GetWithdrawViewModel {
   private notebookSerialNumber: string
-  private studentRA?: string
-  private name?: string
-  private initTime?: number
+  private studentRA?: string | null
+  private name?: string | null
+  private initTime?: number | null
   private state: STATE
 
   constructor(withdraw: Withdraw) {
