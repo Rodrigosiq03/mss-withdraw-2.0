@@ -6,6 +6,7 @@ export class CreateViewmodel {
   private studentRA?: string | null
   private initTime?: number | null
   private finishTime?: number | null
+  private name?: string | null
   private state: STATE
 
   constructor(withdraw: Withdraw) {
@@ -13,6 +14,7 @@ export class CreateViewmodel {
     this.studentRA = withdraw.studentRA
     this.initTime = withdraw.initTime
     this.finishTime = withdraw.finishTime
+    this.name = withdraw.name
     this.state = withdraw.state
   }
 
@@ -23,6 +25,7 @@ export class CreateViewmodel {
       initTime: this.initTime,
       finishTime: this.finishTime,
       state: this.state,
+      name: this.name,
       message: 'The withdraw was created successfully',
     }
   }

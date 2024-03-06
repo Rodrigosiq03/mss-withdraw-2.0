@@ -10,6 +10,7 @@ describe('CreateViewmodel', () => {
       studentRA: '23.00335-9',
       initTime: 1704074148000,
       finishTime: 1704074150000,
+      name: 'John Doe',
       state: STATE.PENDING,
     })
 
@@ -20,6 +21,7 @@ describe('CreateViewmodel', () => {
       studentRA: '23.00335-9',
       initTime: 1704074148000,
       finishTime: 1704074150000,
+      name: 'John Doe',
       state: STATE.PENDING,
       message: 'The withdraw was created successfully',
     }
