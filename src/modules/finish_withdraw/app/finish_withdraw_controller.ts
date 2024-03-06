@@ -20,6 +20,7 @@ import {
   OK,
   Unauthorized,
 } from '../../../shared/helpers/external_interfaces/http_codes'
+import { FinishWithdrawStateInvalid } from '../../../shared/helpers/errors/withdraw_errors'
 
 export class FinishWithdrawController {
   constructor(private usecase: FinishWithdrawUsecase) {}
@@ -48,6 +49,9 @@ export class FinishWithdrawController {
       return new OK(viewModel.toJSON())
     } catch (error: any) {
       if (error instanceof EntityError) {
+        return new BadRequest(error.message)
+      }
+      if (error instanceof FinishWithdrawStateInvalid) {
         return new BadRequest(error.message)
       }
       if (error instanceof ForbiddenAction) {

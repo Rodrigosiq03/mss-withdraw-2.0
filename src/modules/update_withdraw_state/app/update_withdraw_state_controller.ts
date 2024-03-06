@@ -20,6 +20,7 @@ import {
   OK,
   Unauthorized,
 } from '../../../shared/helpers/external_interfaces/http_codes'
+import { UpdateWithdrawStateInvalid } from '../../../shared/helpers/errors/withdraw_errors'
 
 export class UpdateWithdrawController {
   constructor(private usecase: UpdateWithdrawUsecase) {}
@@ -60,6 +61,9 @@ export class UpdateWithdrawController {
     } catch (error: any) {
       if (error instanceof NoItemsFound) {
         return new NotFound(error.message)
+      }
+      if (error instanceof UpdateWithdrawStateInvalid) {
+        return new BadRequest(error.message)
       }
       if (
         error instanceof MissingParameters ||

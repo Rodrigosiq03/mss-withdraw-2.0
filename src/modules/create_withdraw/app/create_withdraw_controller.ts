@@ -16,6 +16,7 @@ import { CreateWithdrawUsecase } from './create_withdraw_usecase'
 import { CreateViewmodel } from './create_withdraw_viewmodel'
 import { Withdraw } from '../../../../src/shared/domain/entities/withdraw'
 import { ForbiddenAction, NoItemsFound } from '../../../shared/helpers/errors/usecase_errors'
+import { WithdrawInUse } from '../../../shared/helpers/errors/withdraw_errors'
 
 export class CreateWithdrawController {
   constructor(private usecase: CreateWithdrawUsecase) {}
@@ -73,6 +74,9 @@ export class CreateWithdrawController {
     } catch (error: any) {
       if (error instanceof NoItemsFound) {
         return new NotFound(error.message)
+      }
+      if (error instanceof WithdrawInUse) {
+        return new BadRequest(error.message)
       }
       if (
         error instanceof MissingParameters ||

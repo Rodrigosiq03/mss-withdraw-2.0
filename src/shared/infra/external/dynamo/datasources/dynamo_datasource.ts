@@ -37,8 +37,6 @@ export class DynamoDatasource {
   }
 
   async putItem(item: Record<string, any>, partitionKey: string, sortKey?: string, options?: Record<string, any>): Promise<any> {
-    item = DynamoDatasource.parseFloatToDecimal(item)
-
     item[this.partitionKey] = partitionKey
 
     if (sortKey) {
@@ -101,10 +99,6 @@ export class DynamoDatasource {
       item[this.sortKey] = sortKey
     }
 
-    // const updateExpression = Object.keys(item).map(key => `${key} = :${key}`).join(', ');
-    // const expressionAttributeValues = Object.keys(item).reduce((acc, key) => ({ ...acc, [`:${key}`]: marshall(item[key]) }), {});
-    // const expressionAttributeNames = Object.keys(item).reduce((acc, key) => ({ ...acc, [`#${key}`]: key }), {});
-
     const updateExpression = Object.keys(item)
       .filter(key => key !== 'PK' && key !== 'SK')  // Exclua as chaves primárias
       .map(key => `#${key} = :${key}`)
@@ -122,10 +116,6 @@ export class DynamoDatasource {
         .filter(key => key !== 'PK' && key !== 'SK')  // Exclua as chaves primárias
         .map(key => [`#${key}`, key])
     )
-
-    console.log('updateExpression - [DYNAMO_DATASOURCE] - ', updateExpression)
-    console.log('expressionAttributeValues - [DYNAMO_DATASOURCE] - ', expressionAttributeValues)
-    console.log('expressionAttributeNames - [DYNAMO_DATASOURCE] - ', expressionAttributeNames)
 
     const params: UpdateItemCommandInput = {
       TableName: this.dynamoTableName,

@@ -4,20 +4,20 @@ import { STATE } from '../../domain/enums/state_enum'
 
 type WithdrawDynamoDTOProps = {
   notebookSerialNumber: string
-  name?: string
-  studentRA?: string
+  name?: string | null
+  studentRA?: string | null
   state: STATE
-  initTime?: number
-  finishTime?: number
+  initTime?: number | null
+  finishTime?: number | null
 }
 
 export class WithdrawDynamoDTO {
   private notebookSerialNumber: string
-  private name?: string 
-  private studentRA?: string
+  private name?: string | null
+  private studentRA?: string | null
   private state: STATE
-  private initTime?: number
-  private finishTime?: number
+  private initTime?: number | null
+  private finishTime?: number | null
 
 
   constructor (props: WithdrawDynamoDTOProps) {
@@ -52,31 +52,19 @@ export class WithdrawDynamoDTO {
     }
   }
 
-  static fromDynamo(withdrawData: any) {
-    const notebookSerialNumber = withdrawData['notebookSerialNumber'] && 
-      withdrawData['notebookSerialNumber']['S'] ? 
-      withdrawData['notebookSerialNumber']['S'] : 
-      undefined
-    const name = withdrawData['name'] && 
-      withdrawData['name']['S'] ? 
-      withdrawData['name']['S'] : 
-      undefined
-    const studentRA = withdrawData['studentRA'] && 
-      withdrawData['studentRA']['S'] ? 
-      withdrawData['studentRA']['S'] : 
-      undefined
-    const state = withdrawData['state'] && 
-      withdrawData['state']['S'] ? 
-      withdrawData['state']['S'] : 
-      undefined
-    const initTime = withdrawData['initTime'] && 
-      withdrawData['initTime']['N'] ? 
-      withdrawData['initTime']['N'] : 
-      undefined
-    const finishTime = withdrawData['finishTime'] && 
-      withdrawData['finishTime']['N'] ? 
-      withdrawData['finishTime']['N'] : 
-      undefined
+  static fromDynamo(withdrawData: any): WithdrawDynamoDTO {
+    const notebookSerialNumber = WithdrawDynamoDTO.extractStringValue(withdrawData, 'notebookSerialNumber')
+    const name = WithdrawDynamoDTO.extractStringValue(withdrawData, 'name')
+    const studentRA = WithdrawDynamoDTO.extractStringValue(withdrawData, 'studentRA')
+    const state = WithdrawDynamoDTO.extractStringValue(withdrawData, 'state') as STATE
+    const initTime = WithdrawDynamoDTO.extractNumberValue(withdrawData, 'initTime')
+    const finishTime = WithdrawDynamoDTO.extractNumberValue(withdrawData, 'finishTime')
+
+    console.log('fromDynamo - ', notebookSerialNumber, name, studentRA, state, initTime, finishTime)
+    if (!notebookSerialNumber || !state) {
+      throw new Error('Invalid withdraw data')
+    }
+
     return new WithdrawDynamoDTO({
       notebookSerialNumber,
       name,
@@ -85,6 +73,20 @@ export class WithdrawDynamoDTO {
       initTime,
       finishTime
     })
+  }
+
+  private static extractStringValue(data: any, key: string): string | undefined {
+    if (data[key] && data[key].S) {
+      return data[key].S
+    }
+    return undefined
+  }
+
+  private static extractNumberValue(data: any, key: string): number | undefined {
+    if (data[key] && data[key].N) {
+      return parseInt(data[key].N)
+    }
+    return undefined
   }
 
   toEntity() {

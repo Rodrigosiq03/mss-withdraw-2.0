@@ -5,7 +5,7 @@ import { RemovalPolicy } from 'aws-cdk-lib'
 export class TemplateDynamoTable extends Construct {
   public table: Table
 
-  constructor(scope: Construct, constructId: string, tableName: string, id: string) {
+  constructor(scope: Construct, constructId: string, id: string, tableName?: string) {
     super(scope, constructId)
 
     if (!tableName || tableName === undefined || tableName === '') throw new Error('DYNAMO_TABLE_NAME is undefined')
