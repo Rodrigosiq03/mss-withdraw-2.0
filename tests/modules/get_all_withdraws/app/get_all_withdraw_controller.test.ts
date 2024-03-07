@@ -12,7 +12,7 @@ describe('Assert Get All Withdraws controller is correct at all', () => {
     const controller = new GetAllWithdrawsController(usecase)
     const request = new HttpRequest({}, {}, {})
 
-    const response = await controller.handle(request)
+    const response = await controller.handle(request, { role: 'EMPLOYEE' })
 
     expect(response?.statusCode).toBe(200)
     expect(response?.body['message']).toBe(

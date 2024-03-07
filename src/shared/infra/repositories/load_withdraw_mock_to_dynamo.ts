@@ -30,7 +30,7 @@ async function setupDynamoTable(): Promise<void> {
   console.log('Setting up DynamoDB table...')
 
   const dynamoClient = new DynamoDBClient({
-    endpoint: 'http://localhost:8000',
+    // endpoint: 'http://localhost:8000',
     region: 'sa-east-1',
   })
   console.log('DynamoDB client created')
@@ -118,42 +118,23 @@ async function withdrawsToLocalDynamo() {
   console.log(`${count} withdraws loaded to local DynamoDB`)
 }
 
-// async function loadMockToRealDynamo() {
-//   const mock = new WithdrawRepositoryMock()
-//   const dynamoRepo = new WithdrawRepositoryDynamo()
+async function loadMockToRealDynamo() {
+  const dynamoRepo = new WithdrawRepositoryDynamo()
 
-//   let count = 0
-//   const dynamoDB = DynamoDBDocument.from(
-//     new DynamoDBClient({
-//       region: Environments.getEnvs().region,
-//       endpoint: Environments.getEnvs().endpointUrl,
-//     }),
-//   )
+  let count = 0
 
-//   dynamoDB.put({
-//     TableName: Environments.getEnvs().dynamoTableName,
-//     Item: {
-//       PK: 'COUNTER',
-//       SK: 'COUNTER',
-//       COUNTER: 0,
-//     },
-//   })
+  console.log('Loading mock to real DynamoDB...')
+  const withdraws = generateAllWithdrawsFromJson()
 
-//   console.log('Loading mock to real DynamoDB...')
-//   const withdraws = await mock.getAllWithdraws()
+  for (const withdraw of withdraws) {
+    // await dynamoRepo.addWithdraw(withdraw)
+    // console.log('withdraw - [LOAD_MOCK_TO_REAL_DYNAMO] - ', withdraw
+    await dynamoRepo.addWithdraw(withdraw)
+    count += 1
+  }
 
-//   for (const withdraw of withdraws) {
-//     await dynamoRepo.createWithdraw(
-//       withdraw.notebookSerialNumber,
-//       withdraw.studentRA ?? '',
-//       withdraw.name ?? '',
-//       withdraw.initTime ?? 0,
-//     )
-//     count += 1
-//   }
-
-//   console.log(`${count} users loaded to real DynamoDB`)
-// }                                                         ----> DEVE SER CORRIJIDO, AGUARDANDO RESPOSTA
+  console.log(`${count} users loaded to real DynamoDB`)
+}                                                       
 
 // async function main() {
 //   try {
@@ -166,16 +147,14 @@ async function withdrawsToLocalDynamo() {
 
 if (require.main === module) {
   (async () => {
-    await setupDynamoTable()
-    // await loadMockToRealDynamo()
-    // await loadMockToRealDynamo()
-    await withdrawsToLocalDynamo()
+    // await setupDynamoTable()
+    await loadMockToRealDynamo()
+    // await withdrawsToLocalDynamo()
   })()
 } else {
   (async () => {
     await setupDynamoTable()
-    // await loadMockToRealDynamo()
-    // await loadMockToRealDynamo()
-    await withdrawsToLocalDynamo()
+    await loadMockToRealDynamo()
+    // await withdrawsToLocalDynamo()
   })()
 }

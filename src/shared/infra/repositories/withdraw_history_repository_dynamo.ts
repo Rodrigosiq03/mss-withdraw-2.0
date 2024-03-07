@@ -2,14 +2,16 @@ import { Withdraw } from '../../../shared/domain/entities/withdraw'
 import { Environments } from '../../../shared/environments'
 import { WithdrawDynamoDTO } from '../dto/withdraw_dynamo_dto'
 import { DynamoDatasource } from '../external/dynamo/datasources/dynamo_datasource'
+import { v4 } from 'uuid'
 
 export class WithdrawHistoryRepositoryDynamo {
-  static partitionKeyFormat(notebookSerialNumber: string): string {
-    return `withdraw#${notebookSerialNumber}`
+  static partitionKeyFormat(ra: string): string {
+    const uuid = v4()
+    return `withdraw#${ra}#${uuid}`
   }
 
-  static sortKeyFormat(notebookSerialNumber: string): string {
-    return `#${notebookSerialNumber}`
+  static sortKeyFormat(ra: string): string {
+    return `#${ra}`
   }
 
   constructor(
@@ -26,14 +28,21 @@ export class WithdrawHistoryRepositoryDynamo {
 
   async addWithdrawHistory(withdraw: Withdraw): Promise<boolean> {
     const withdrawDTO = WithdrawDynamoDTO.fromEntity(withdraw)
+    const withdrawDynamo = withdrawDTO.toDynamo()
+
+    console.log('withdrawDynamoHistory - [ADD WIHTDRAW HISTORY]', withdrawDynamo)
+
+    if (withdraw.studentRA === undefined) {
+      throw new Error('Student RA is undefined')
+    }
 
     await this.dynamo.putItem(
-      withdrawDTO.toDynamo(),
+      withdrawDynamo,
       WithdrawHistoryRepositoryDynamo.partitionKeyFormat(
-        withdraw.notebookSerialNumber,
+        withdraw.studentRA!,
       ),
       WithdrawHistoryRepositoryDynamo.sortKeyFormat(
-        withdraw.notebookSerialNumber,
+        withdraw.studentRA!,
       ),
     )
 
