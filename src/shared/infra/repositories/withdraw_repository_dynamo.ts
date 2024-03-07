@@ -7,7 +7,6 @@ import { NoItemsFound } from '../../../../src/shared/helpers/errors/usecase_erro
 import { WithdrawDynamoDTO } from '../dto/withdraw_dynamo_dto'
 import { STATE } from '../../../shared/domain/enums/state_enum'
 import { WithdrawHistoryRepositoryDynamo } from './withdraw_history_repository_dynamo'
-import { FinishWithdrawStateInvalid, UpdateWithdrawStateInvalid, WithdrawInUse } from '../../../shared/helpers/errors/withdraw_errors'
 
 export class WithdrawRepositoryDynamo implements IWithdrawRepository {
   static partitionKeyFormat(notebookSerialNumber: string): string {
@@ -63,9 +62,7 @@ export class WithdrawRepositoryDynamo implements IWithdrawRepository {
       throw new NoItemsFound('notebookSerialNumber')
     }
 
-    if (resp['Item']['state'] !== STATE.INACTIVE) {
-      throw new WithdrawInUse()
-    }
+    
 
     const itemToUpdate: Record<string, any> = {}
 
@@ -138,9 +135,7 @@ export class WithdrawRepositoryDynamo implements IWithdrawRepository {
       throw new NoItemsFound('notebookSerialNumber')
     }
 
-    if (resp['Item']['state'] !== STATE.PENDING) {
-      throw new UpdateWithdrawStateInvalid()
-    }
+    
 
     const itemToUpdate: Record<string, any> = {}
 
@@ -173,9 +168,7 @@ export class WithdrawRepositoryDynamo implements IWithdrawRepository {
     if (!repo['Item']) {
       throw new NoItemsFound('notebookSerialNumber')
     }
-    if (repo['Item']['state'] !== STATE.APPROVED) {
-      throw new FinishWithdrawStateInvalid()
-    }
+    
 
     const withdraw = WithdrawDynamoDTO.fromDynamo(repo['Item']).toEntity()
     const withdrawHistoryRepo = new WithdrawHistoryRepositoryDynamo()
