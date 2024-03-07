@@ -18,3 +18,9 @@ export class FinishWithdrawStateInvalid extends BaseError {
     super('The notebook has not been used')
   }
 }
+
+export class AlreadyGotWithdraw extends BaseError {
+  constructor() {
+    super('The student already got a notebook')
+  }
+}
