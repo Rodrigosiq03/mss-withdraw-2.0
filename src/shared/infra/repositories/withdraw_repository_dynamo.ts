@@ -68,7 +68,6 @@ export class WithdrawRepositoryDynamo implements IWithdrawRepository {
 
     const itemToUpdate: Record<string, any> = {}
 
-
     itemToUpdate['studentRA'] = studentRA
     itemToUpdate['name'] = name
     itemToUpdate['initTime'] = initTime
@@ -86,11 +85,28 @@ export class WithdrawRepositoryDynamo implements IWithdrawRepository {
 
     return Promise.resolve(withdrawDto)
   }
+  async getWithdrawByStudentRA(studentRA: string): Promise<Withdraw | undefined> {
+    const resp = await this.dynamo.getAllItems()
+    if (!resp['Items']) {
+      throw new NoItemsFound('this dynamo table')
+    }
+
+    console.log('getWithdrawByStudentRA - ', resp['Items'])
+
+    for (const withdrawDynamo of resp['Items']) {
+      const withdrawDto = WithdrawDynamoDTO.fromDynamo(withdrawDynamo)
+      const withdrawEntity = withdrawDto.toEntity()
+      if (withdrawEntity.studentRA === studentRA) {
+        return Promise.resolve(withdrawEntity)
+      }
+    }
+    return Promise.resolve(undefined)
+  }
   async getWithdrawByNotebookSerialNumber(
     notebookSerialNumber: string,
   ): Promise<Withdraw> {
     const repo = await this.dynamo.getItem(
-      WithdrawHistoryRepositoryDynamo.partitionKeyFormat(notebookSerialNumber),
+      WithdrawRepositoryDynamo.partitionKeyFormat(notebookSerialNumber),
       WithdrawRepositoryDynamo.sortKeyFormat(notebookSerialNumber),
     )
     if (!repo['Item']) {
@@ -99,29 +115,6 @@ export class WithdrawRepositoryDynamo implements IWithdrawRepository {
 
     const withdrawDto = WithdrawDynamoDTO.fromDynamo(repo['Item']).toEntity()
     return Promise.resolve(withdrawDto)
-  }
-  async getWithdrawByStudentRA(studentRA: string): Promise<Withdraw> {
-    const resp = await this.dynamo.getAllItems()
-
-    if (!resp['Items']) {
-      throw new NoItemsFound('this dynamo table')
-    }
-
-    console.log('getWithdrawByStudentRA - ', resp['Items'])
-
-    const withdraws: Withdraw[] = []
-    
-    for (const withdrawDynamo of resp['Items']) {
-      const withdrawDto = WithdrawDynamoDTO.fromDynamo(withdrawDynamo)
-      const withdrawEntity = withdrawDto.toEntity()
-      withdraws.push(withdrawEntity)
-    }
-
-    const withdraw = withdraws.find((withdraw) => withdraw.studentRA === studentRA)
-
-    if (!withdraw) throw new NoItemsFound('studentRA')
-
-    return Promise.resolve(withdraw)
   }
   async getAllWithdraws(): Promise<Withdraw[]> {
     const resp = await this.dynamo.getAllItems()
