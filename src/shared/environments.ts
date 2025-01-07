@@ -3,6 +3,7 @@ import { IWithdrawRepository } from './domain/repositories/withdraw_repository_i
 import { config } from 'dotenv'
 import { WithdrawRepositoryMock } from './infra/repositories/withdraw_repository_mock'
 import { WithdrawRepositoryDynamo } from './infra/repositories/withdraw_repository_dynamo'
+import { NotebookRepositoryDynamo } from './infra/repositories/notebook_repository_dynamo'
 config()
 
 export class Environments {
@@ -94,6 +95,10 @@ export class Environments {
     } else {
       throw new Error('Invalid STAGE')
     }
+  }
+
+  static getNotebookRepo() {
+    return new NotebookRepositoryDynamo()
   }
 
   static getEnvs() {
