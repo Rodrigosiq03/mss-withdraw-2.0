@@ -16,6 +16,7 @@ export class LambdaStack extends Construct {
   getAllWithdrawFunction: lambda.Function
   updateWithdrawStateFunction: lambda.Function
   finishWithdrawFunction: lambda.Function
+  healthCheckFunction: lambda.Function
 
   createLambdaApiGatewayIntegration(
     moduleName: string,
@@ -93,6 +94,13 @@ export class LambdaStack extends Construct {
     this.updateWithdrawStateFunction = this.createLambdaApiGatewayIntegration(
       'update_withdraw_state',
       'POST',
+      apiGatewayResource,
+      environmentVariables,
+    )
+
+    this.healthCheckFunction = this.createLambdaApiGatewayIntegration(
+      'health_check',
+      'GET',
       apiGatewayResource,
       environmentVariables,
     )
