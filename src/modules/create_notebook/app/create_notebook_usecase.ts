@@ -1,14 +1,14 @@
-import { Notebook } from '../../../../src/shared/domain/entities/notebook'
-import { INotebookRepository } from '../../../../src/shared/domain/repositories/notebook_repository_interface'
+import { IWithdrawRepository } from '../../../shared/domain/repositories/withdraw_repository_interface'
 import { EntityError } from '../../../../src/shared/helpers/errors/domain_errors'
+import { Withdraw } from '../../../shared/domain/entities/withdraw'
 
 export class CreateNotebookUsecase {
-  constructor(private repo: INotebookRepository) {}
+  constructor(private repo: IWithdrawRepository) {}
 
   async execute(
     notebookSerialNumber: string,
   ) {
-    if (!Notebook.validateNotebookSerialNumber(notebookSerialNumber)) {
+    if (!Withdraw.validateNotebookSerialNumber(notebookSerialNumber)) {
       throw new EntityError('notebookSerialNumber')
     }
 
