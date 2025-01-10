@@ -2,6 +2,7 @@ declare namespace NodeJS {
   interface ProcessEnv {
     STAGE: string
     REGION: string
+    GITHUB_REF_NAME: string
     STACK_NAME: string
     AWS_ACCOUNT_ID: string
     DYNAMO_TABLE_NAME: string

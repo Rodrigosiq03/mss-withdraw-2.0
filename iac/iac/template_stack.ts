@@ -9,8 +9,8 @@ export class TemplateStack extends Stack {
   constructor(scope: Construct, constructId: string, props?: StackProps) {
     super(scope, constructId, props)
 
-    const restApi = new RestApi(this, 'NoteMauaWithdrawRESTAPI', {
-      restApiName: 'NoteMauaWithdrawRESTAPI',
+    const restApi = new RestApi(this, `${envs.STACK_NAME}-RestApi`, {
+      restApiName: `${envs.STACK_NAME}-RestApi`,
       description: 'This is the REST API for the NoteMaua mss withdraw service.',
       defaultCorsPreflightOptions: {
         allowOrigins: Cors.ALL_ORIGINS,
@@ -27,8 +27,8 @@ export class TemplateStack extends Stack {
       }
     })
 
-    const dynamoTable = new TemplateDynamoTable(this, 'WithdrawDynamoTable', 'NoteMauaMssWithdrawDynamoTable', envs.DYNAMO_TABLE_NAME)
-    const dynamoTableHistory = new TemplateDynamoTable(this, 'WithdrawHistoryDynamoTable', 'NoteMauaMssWithdrawHistoryDynamoTable', envs.DYNAMO_TABLE_NAME_HISTORY)
+    const dynamoTable = new TemplateDynamoTable(this, `${envs.STACK_NAME}-DynamoTable`, `${envs.STACK_NAME}-DynamoTable`, envs.DYNAMO_TABLE_NAME)
+    const dynamoTableHistory = new TemplateDynamoTable(this, `${envs.STACK_NAME}-DynamoHistoryTable`, `${envs.STACK_NAME}-DynamoHistoryTable`, envs.DYNAMO_TABLE_NAME_HISTORY)
 
     const ENVIRONMENT_VARIABLES = {
       'STAGE': envs.STAGE,
@@ -36,9 +36,7 @@ export class TemplateStack extends Stack {
       'DYNAMO_PARTITION_KEY': 'PK',
       'DYNAMO_SORT_KEY': 'SK',
       'REGION': envs.REGION,
-      'ENDPOINT_URL': envs.ENDPOINT_URL,
       'DYNAMO_TABLE_NAME_HISTORY': envs.DYNAMO_TABLE_NAME_HISTORY,
-      'JWT_SECRET': envs.JWT_SECRET,
     }
 
     const lambdaStack = new LambdaStack(this, apigatewayResource, ENVIRONMENT_VARIABLES)
