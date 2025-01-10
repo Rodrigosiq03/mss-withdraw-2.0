@@ -7,7 +7,12 @@ import { NoItemsFound } from '../../../../src/shared/helpers/errors/usecase_erro
 import { WithdrawDynamoDTO } from '../dto/withdraw_dynamo_dto'
 import { STATE } from '../../../shared/domain/enums/state_enum'
 import { WithdrawHistoryRepositoryDynamo } from './withdraw_history_repository_dynamo'
-import { WithdrawInUse, FinishWithdrawStateInvalid, UpdateWithdrawStateInvalid, AlreadyGotWithdraw } from '../../../shared/helpers/errors/withdraw_errors'
+import {
+  WithdrawInUse,
+  FinishWithdrawStateInvalid,
+  UpdateWithdrawStateInvalid,
+  AlreadyGotWithdraw,
+} from '../../../shared/helpers/errors/withdraw_errors'
 
 export class WithdrawRepositoryDynamo implements IWithdrawRepository {
   static partitionKeyFormat(notebookSerialNumber: string): string {
@@ -41,9 +46,34 @@ export class WithdrawRepositoryDynamo implements IWithdrawRepository {
     const withdrawDynamo = withdrawDto.toDynamo()
     console.log('withdrawDynamo - [ADD WITHDRAW] - ', withdrawDynamo)
 
-    await this.dynamo.putItem(withdrawDynamo,
-      WithdrawRepositoryDynamo.partitionKeyFormat(withdraw.notebookSerialNumber),
+    await this.dynamo.putItem(
+      withdrawDynamo,
+      WithdrawRepositoryDynamo.partitionKeyFormat(
+        withdraw.notebookSerialNumber,
+      ),
       WithdrawRepositoryDynamo.sortKeyFormat(withdraw.notebookSerialNumber),
+    )
+    return Promise.resolve(withdrawDto.toEntity())
+  }
+
+  async createNotebook(
+    notebookSerialNumber: string,
+  ): Promise<Withdraw> {
+    const withdraw = new Withdraw({
+      notebookSerialNumber,
+      studentRA: null,
+      name: undefined,
+      initTime: null,
+      finishTime: null,
+      state: STATE.INACTIVE,
+    })
+    const withdrawDto = WithdrawDynamoDTO.fromEntity(withdraw)
+    const withdrawDynamo = withdrawDto.toDynamo()
+
+    await this.dynamo.putItem(
+      withdrawDynamo,
+      WithdrawRepositoryDynamo.partitionKeyFormat(notebookSerialNumber),
+      WithdrawRepositoryDynamo.sortKeyFormat(notebookSerialNumber),
     )
     return Promise.resolve(withdrawDto.toEntity())
   }
@@ -54,7 +84,8 @@ export class WithdrawRepositoryDynamo implements IWithdrawRepository {
     name: string,
     initTime: number,
   ): Promise<Withdraw> {
-    const withdraw = await this.getWithdrawByNotebookSerialNumber(notebookSerialNumber)
+    const withdraw =
+      await this.getWithdrawByNotebookSerialNumber(notebookSerialNumber)
 
     if (!withdraw) throw new NoItemsFound('notebookSerialNumber')
 
@@ -85,7 +116,9 @@ export class WithdrawRepositoryDynamo implements IWithdrawRepository {
 
     return Promise.resolve(withdrawDto)
   }
-  async getWithdrawByStudentRA(studentRA: string): Promise<Withdraw | undefined> {
+  async getWithdrawByStudentRA(
+    studentRA: string,
+  ): Promise<Withdraw | undefined> {
     const resp = await this.dynamo.getAllItems()
     if (!resp['Items']) {
       throw new NoItemsFound('this dynamo table')
@@ -126,7 +159,7 @@ export class WithdrawRepositoryDynamo implements IWithdrawRepository {
     console.log('getAllWithdraws - ', resp['Items'])
 
     const withdraws: Withdraw[] = []
-    
+
     for (const withdrawDynamo of resp['Items']) {
       const withdrawDto = WithdrawDynamoDTO.fromDynamo(withdrawDynamo)
       const withdrawEntity = withdrawDto.toEntity()
@@ -139,13 +172,17 @@ export class WithdrawRepositoryDynamo implements IWithdrawRepository {
     notebookSerialNumber: string,
     isChecked: boolean,
   ): Promise<Withdraw> {
-    const withdraw = await this.getWithdrawByNotebookSerialNumber(notebookSerialNumber)
+    const withdraw =
+      await this.getWithdrawByNotebookSerialNumber(notebookSerialNumber)
 
     if (!withdraw) throw new NoItemsFound('notebookSerialNumber')
 
-    if (withdraw.state === STATE.INACTIVE || withdraw.state === STATE.APPROVED) {
+    if (
+      withdraw.state === STATE.INACTIVE ||
+      withdraw.state === STATE.APPROVED
+    ) {
       throw new UpdateWithdrawStateInvalid()
-    }    
+    }
 
     const itemToUpdate: Record<string, any> = {}
 
@@ -174,14 +211,15 @@ export class WithdrawRepositoryDynamo implements IWithdrawRepository {
   async finishWithdrawByNotebookSerialNumber(
     notebookSerialNumber: string,
   ): Promise<Withdraw> {
-    const withdraw = await this.getWithdrawByNotebookSerialNumber(notebookSerialNumber)
+    const withdraw =
+      await this.getWithdrawByNotebookSerialNumber(notebookSerialNumber)
 
     if (!withdraw) throw new NoItemsFound('notebookSerialNumber')
 
     if (withdraw.state === STATE.INACTIVE || withdraw.state === STATE.PENDING) {
       throw new FinishWithdrawStateInvalid()
     }
-    
+
     const withdrawHistoryRepo = new WithdrawHistoryRepositoryDynamo()
     withdraw.setFinishTime(new Date().getTime())
     console.log('withdraw - [FINISH WITHDRAW] - ', withdraw)
