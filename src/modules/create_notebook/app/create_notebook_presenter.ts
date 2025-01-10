@@ -9,7 +9,7 @@ import {
 import { CreateNotebookController } from './create_notebook_controller'
 import { CreateNotebookUsecase } from './create_notebook_usecase'
 
-const repo = Environments.getNotebookRepo()
+const repo = Environments.getWithdrawRepo()
 const usecase = new CreateNotebookUsecase(repo)
 const controller = new CreateNotebookController(usecase)
 
