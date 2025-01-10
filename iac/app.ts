@@ -15,6 +15,20 @@ const app = new cdk.App()
 
 dotenv.config()
 
+const requiredEnvs: (keyof typeof envs)[] = [
+  'REGION',
+  'AWS_ACCOUNT_ID',
+  'STACK_NAME',
+  'AWS_ACCESS_KEY_ID',
+  'AWS_SECRET_ACCESS_KEY_ID',
+]
+
+requiredEnvs.forEach((envVar) => {
+  if (!envs[envVar]) {
+    throw new Error(`Missing required environment variable: ${envVar}`)
+  }
+})
+
 const awsRegion = envs.REGION
 const awsAccount = envs.AWS_ACCOUNT_ID
 const stackName = envs.STACK_NAME
