@@ -30,8 +30,8 @@ export class LambdaStack extends Construct {
       .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
       .join(' ')
 
-    const lambdaFunction = new NodejsFunction(this, `${modifiedModuleName}-${envs.STACK_NAME}`, {
-      functionName: `${modifiedModuleName}-${envs.STACK_NAME}`,
+    const lambdaFunction = new NodejsFunction(this, `${envs.STACK_NAME}-${modifiedModuleName}`, {
+      functionName: `${envs.STACK_NAME}-${modifiedModuleName}`,
       entry: path.join(
         __dirname,
         `../../src/modules/${moduleName}/app/${moduleName}_presenter.ts`,
