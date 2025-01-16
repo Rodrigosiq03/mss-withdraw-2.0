@@ -4,6 +4,9 @@ import { IWithdrawRepository } from '../../domain/repositories/withdraw_reposito
 import { NoItemsFound } from '../../helpers/errors/usecase_errors'
 
 export class WithdrawRepositoryMock implements IWithdrawRepository {
+  deleteNotebook(notebookSerialNumber: string): Promise<void> {
+    throw new Error('Method not implemented.')
+  }
   private inactiveWithdraws: Withdraw[] = [
     new Withdraw({
       notebookSerialNumber: 'ABC123',
