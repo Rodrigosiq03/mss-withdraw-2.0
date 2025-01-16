@@ -78,6 +78,13 @@ export class WithdrawRepositoryDynamo implements IWithdrawRepository {
     return Promise.resolve(withdrawDto.toEntity())
   }
 
+  deleteNotebook(notebookSerialNumber: string): Promise<void> {
+    return this.dynamo.deleteItem(
+      WithdrawRepositoryDynamo.partitionKeyFormat(notebookSerialNumber),
+      WithdrawRepositoryDynamo.sortKeyFormat(notebookSerialNumber),
+    )
+  }
+
   async createWithdraw(
     notebookSerialNumber: string,
     studentRA: string,
