@@ -30,7 +30,7 @@ export class CreateNotebookController {
 
       const notebookSerialNumber = request.data.notebookSerialNumber as string
         
-      if (role === undefined || role !== 'STUDENT') {
+      if (role === undefined || role === 'STUDENT') {
         throw new ForbiddenAction('type of user')
       }
         
