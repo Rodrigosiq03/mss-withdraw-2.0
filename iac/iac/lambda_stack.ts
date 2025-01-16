@@ -18,6 +18,7 @@ export class LambdaStack extends Construct {
   finishWithdrawFunction: lambda.Function
   healthCheckFunction: lambda.Function
   deleteNotebookFunction: lambda.Function
+  createNotebookFunction: lambda.Function
 
   createLambdaApiGatewayIntegration(
     moduleName: string,
@@ -74,6 +75,12 @@ export class LambdaStack extends Construct {
       apiGatewayResource,
       environmentVariables,
     )
+    this.createNotebookFunction = this.createLambdaApiGatewayIntegration(
+      'create_notebook',
+      'POST',
+      apiGatewayResource,
+      environmentVariables
+    )
     this.getAllWithdrawFunction = this.createLambdaApiGatewayIntegration(
       'get_all_withdraw',
       'GET',
@@ -98,14 +105,12 @@ export class LambdaStack extends Construct {
       apiGatewayResource,
       environmentVariables,
     )
-
     this.healthCheckFunction = this.createLambdaApiGatewayIntegration(
       'health_check',
       'GET',
       apiGatewayResource,
       environmentVariables,
     )
-
     this.deleteNotebookFunction = this.createLambdaApiGatewayIntegration(
       'delete_notebook',
       'DELETE',
@@ -120,6 +125,7 @@ export class LambdaStack extends Construct {
       this.updateWithdrawStateFunction,
       this.getAllWithdrawFunction,
       this.deleteNotebookFunction,
+      this.createNotebookFunction
     ]
   }
 }
