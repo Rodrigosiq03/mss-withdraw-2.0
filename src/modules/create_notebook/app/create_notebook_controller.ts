@@ -20,6 +20,7 @@ export class CreateNotebookController {
   constructor(private usecase: CreateNotebookUsecase) {}
   
   async handle(request: IRequest, user: any) {
+    console.log('ENTROU NO CONTROLLER')
     try {
       if (user === undefined) {
         throw new MissingParameters('token')
@@ -36,10 +37,12 @@ export class CreateNotebookController {
       if (!request.data.notebookSerialNumber) {
         throw new MissingParameters('notebookSerialNumber')
       }
-  
+
+      console.log('DEU MERDA ANTES DE CHAMAR O USECASE')
       const notebook = await this.usecase.execute(
         notebookSerialNumber
       )
+      console.log('DEU MERDA AO CHAMAR O USECASE')
   
       const viewmodel = new CreateNotebookViewmodel(notebook)
   
