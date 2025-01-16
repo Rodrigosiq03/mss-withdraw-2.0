@@ -17,6 +17,7 @@ export class LambdaStack extends Construct {
   updateWithdrawStateFunction: lambda.Function
   finishWithdrawFunction: lambda.Function
   healthCheckFunction: lambda.Function
+  deleteNotebookFunction: lambda.Function
 
   createLambdaApiGatewayIntegration(
     moduleName: string,
@@ -105,12 +106,20 @@ export class LambdaStack extends Construct {
       environmentVariables,
     )
 
+    this.deleteNotebookFunction = this.createLambdaApiGatewayIntegration(
+      'delete_notebook',
+      'DELETE',
+      apiGatewayResource,
+      environmentVariables,
+    )
+
     this.functionsThatNeedDynamoPermissions = [
       this.getWithdrawFunction,
       this.createWithdrawFunction,
       this.finishWithdrawFunction,
       this.updateWithdrawStateFunction,
       this.getAllWithdrawFunction,
+      this.deleteNotebookFunction,
     ]
   }
 }
