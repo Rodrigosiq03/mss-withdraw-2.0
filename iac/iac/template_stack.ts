@@ -39,7 +39,7 @@ export class TemplateStack extends Stack {
       'DYNAMO_TABLE_NAME_HISTORY': envs.DYNAMO_TABLE_NAME_HISTORY,
     }
 
-    const lambdaStack = new LambdaStack(this, apigatewayResource, ENVIRONMENT_VARIABLES)
+    const lambdaStack = new LambdaStack(this, apigatewayResource, ENVIRONMENT_VARIABLES, dynamoTable, dynamoTableHistory)
 
     dynamoTable.table.grantReadWriteData(lambdaStack.getWithdrawFunction)
     dynamoTable.table.grantReadWriteData(lambdaStack.createWithdrawFunction)
