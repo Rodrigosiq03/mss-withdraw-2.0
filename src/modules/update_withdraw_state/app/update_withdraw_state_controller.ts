@@ -27,7 +27,7 @@ export class UpdateWithdrawController {
 
   async handle(request: IRequest, user: any) {
     try {
-      if (!user || (user.role !== 'EMPLOYEE' && user.role !== 'ADMIN')) {
+      if (!user || (user.role !== 'EMPLOYEE')) {
         throw new ForbiddenAction('type of user')
       }
 
