@@ -15,8 +15,12 @@ const controller = new CreateNotebookController(usecase)
 
 export async function createNotebookPresenter(event: Record<string, any>) {
   const httpRequest = new LambdaHttpRequest(event)
+  console.log('httpRequest DENTRO DO PRESENTER', httpRequest)
   const decoded = getUserFromToken(httpRequest.data.Authorization)
+  console.log('DECODED DENTRO DO PRESENTER', decoded)
+  console.log('vou chamar CONTROLLER DENTRO DO PRESENTER', controller)
   const response = await controller.handle(httpRequest, decoded)
+  console.log('response DENTRO DO PRESENTER', response)
   const httpResponse = new LambdaHttpResponse(
     response?.body,
     response?.statusCode,
