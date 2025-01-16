@@ -23,7 +23,7 @@ export class CreateNotebookController {
     console.log('ENTROU NO CONTROLLER')
     try {
       if (user === undefined) {
-        throw new MissingParameters('token')
+        throw new MissingParameters('user')
       }
   
       const role = user.role
