@@ -70,11 +70,16 @@ export class WithdrawRepositoryDynamo implements IWithdrawRepository {
     const withdrawDto = WithdrawDynamoDTO.fromEntity(withdraw)
     const withdrawDynamo = withdrawDto.toDynamo()
 
+    console.log('createWithdraw - [REPOSITORY] TENTANDO CRIAR AGORA AQUI NO REPO DYNAMO- ', notebookSerialNumber)
+
+
     await this.dynamo.putItem(
       withdrawDynamo,
       WithdrawRepositoryDynamo.partitionKeyFormat(notebookSerialNumber),
       WithdrawRepositoryDynamo.sortKeyFormat(notebookSerialNumber),
     )
+    console.log('createWithdraw - [REPOSITORY] CRIOUUUUUU- ', notebookSerialNumber)
+
     return Promise.resolve(withdrawDto.toEntity())
   }
 
@@ -93,12 +98,12 @@ export class WithdrawRepositoryDynamo implements IWithdrawRepository {
   ): Promise<Withdraw> {
     const withdraw =
       await this.getWithdrawByNotebookSerialNumber(notebookSerialNumber)
-
-    if (!withdraw) throw new NoItemsFound('notebookSerialNumber')
-
-    if (withdraw.state === STATE.APPROVED || withdraw.state === STATE.PENDING) {
-      throw new WithdrawInUse()
-    }
+      
+      if (!withdraw) throw new NoItemsFound('notebookSerialNumber')
+        
+        if (withdraw.state === STATE.APPROVED || withdraw.state === STATE.PENDING) {
+          throw new WithdrawInUse()
+        }
 
     const alreadyGotWithdraw = await this.getWithdrawByStudentRA(studentRA)
 
