@@ -6,6 +6,7 @@ import { Resource, LambdaIntegration } from 'aws-cdk-lib/aws-apigateway'
 import { Duration } from 'aws-cdk-lib'
 import * as path from 'path'
 import envs from '../..'
+import { TemplateDynamoTable } from './template_dynamo_table'
 
 export class LambdaStack extends Construct {
   functionsThatNeedDynamoPermissions: lambda.Function[] = []
@@ -57,6 +58,8 @@ export class LambdaStack extends Construct {
     scope: Construct,
     apiGatewayResource: Resource,
     environmentVariables: Record<string, any>,
+    dynamoTable: TemplateDynamoTable,
+    dynamoTableHistory: TemplateDynamoTable 
   ) {
     super(scope, `${envs.STACK_NAME}-LambdaStack`)
 
@@ -127,5 +130,11 @@ export class LambdaStack extends Construct {
       this.deleteNotebookFunction,
       this.createNotebookFunction
     ]
+
+    this.functionsThatNeedDynamoPermissions.forEach((lambdaFunction) => {
+      dynamoTable.table.grantReadWriteData(lambdaFunction)
+    })
+
+    dynamoTableHistory.table.grantReadWriteData(this.finishWithdrawFunction)
   }
 }
