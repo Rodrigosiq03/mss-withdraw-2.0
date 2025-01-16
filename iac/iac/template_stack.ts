@@ -27,8 +27,8 @@ export class TemplateStack extends Stack {
       }
     })
 
-    const dynamoTable = new TemplateDynamoTable(this, `${envs.STACK_NAME}-DynamoTable`, `${envs.STACK_NAME}-DynamoTable`, envs.DYNAMO_TABLE_NAME)
-    const dynamoTableHistory = new TemplateDynamoTable(this, `${envs.STACK_NAME}-DynamoHistoryTable`, `${envs.STACK_NAME}-DynamoHistoryTable`, envs.DYNAMO_TABLE_NAME_HISTORY)
+    const dynamoTable = new TemplateDynamoTable(this, `${envs.STACK_NAME}-${envs.DYNAMO_TABLE_NAME}`, envs.DYNAMO_TABLE_NAME)
+    const dynamoTableHistory = new TemplateDynamoTable(this, `${envs.STACK_NAME}-${envs.DYNAMO_TABLE_NAME_HISTORY}`, envs.DYNAMO_TABLE_NAME_HISTORY)
 
     const ENVIRONMENT_VARIABLES = {
       'STAGE': envs.STAGE,
