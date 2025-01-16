@@ -62,7 +62,7 @@ export class WithdrawRepositoryDynamo implements IWithdrawRepository {
     const withdraw = new Withdraw({
       notebookSerialNumber,
       studentRA: null,
-      name: undefined,
+      name: null,
       initTime: null,
       finishTime: null,
       state: STATE.INACTIVE,
