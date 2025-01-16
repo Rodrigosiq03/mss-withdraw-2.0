@@ -14,6 +14,7 @@ const usecase = new CreateNotebookUsecase(repo)
 const controller = new CreateNotebookController(usecase)
 
 export async function createNotebookPresenter(event: Record<string, any>) {
+  console.log('ENTROU NO PRESENTER')
   const httpRequest = new LambdaHttpRequest(event)
   console.log('httpRequest DENTRO DO PRESENTER', httpRequest)
   const decoded = getUserFromToken(httpRequest.data.Authorization)
