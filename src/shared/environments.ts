@@ -1,7 +1,6 @@
 import { STAGE } from './domain/enums/stage_enum'
 import { IWithdrawRepository } from './domain/repositories/withdraw_repository_interface'
 import { config } from 'dotenv'
-import { WithdrawRepositoryMock } from './infra/repositories/withdraw_repository_mock'
 import { WithdrawRepositoryDynamo } from './infra/repositories/withdraw_repository_dynamo'
 config()
 
@@ -83,10 +82,7 @@ export class Environments {
   }
 
   static getWithdrawRepo(): IWithdrawRepository {
-    if (Environments.getEnvs().stage === STAGE.TEST) {
-      // Retorna uma instância do seu repositório mock para testes
-      return new WithdrawRepositoryMock()
-    } else if (
+    if  (
       Environments.getEnvs().stage === STAGE.DEV ||
       Environments.getEnvs().stage === STAGE.PROD
     ) {
